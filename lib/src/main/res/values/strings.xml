@@ -1,0 +1,4 @@
+<resources>
+    <string name="error_state_title">Error</string>
+    <string name="error_state_retry">Retry</string>
+</resources>

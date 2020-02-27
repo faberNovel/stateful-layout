@@ -1,0 +1,9 @@
+<resources>
+
+    <style name="Widget.Stateful.StatefulLayout" parent="">
+        <item name="initialState">@id/stateContent</item>
+        <item name="loadingStateLayout">@layout/state_loading</item>
+        <item name="errorStateLayout">@layout/state_error</item>
+    </style>
+
+</resources>

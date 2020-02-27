@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="StatefulLayout">
+        <attr name="loadingStateLayout" format="reference"/>
+        <attr name="errorStateLayout" format="reference"/>
+        <attr name="initialState" format="reference"/>
+        <attr name="stateTransition" format="reference"/>
+        <attr name="defaultEnterAnimation" format="reference"/>
+        <attr name="defaultExitAnimation" format="reference"/>
+    </declare-styleable>
+</resources>
