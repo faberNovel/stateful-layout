@@ -5,13 +5,20 @@
     <public type="id" name="stateContent" />
     <public type="string" name="error_state_title"/>
     <public type="string" name="error_state_retry"/>
+
+    <!-- StatefulLayout style attributes -->
     <public type="style" name="Widget.Stateful.StatefulLayout"/>
     <public type="attr" name="statefulLayoutStyle" />
-    <!-- StatefulLayout style attributes -->
     <public type="attr" name="loadingStateLayout"/>
     <public type="attr" name="errorStateLayout"/>
     <public type="attr" name="initialState"/>
-    <public type="attr" name="stateTransition"/>
     <public type="attr" name="defaultEnterAnim"/>
     <public type="attr" name="defaultExitAnim"/>
+
+    <!-- State style attributes-->
+    <public type="style" name="Widget.Stateful.State"/>
+    <public type="attr" name="stateStyle" />
+    <public type="attr" name="enterAnim"/>
+    <public type="attr" name="exitAnim"/>
+
 </resources>
