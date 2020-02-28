@@ -7,8 +7,9 @@ import android.os.Parcelable
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
-import androidx.annotation.AnimRes
 import androidx.annotation.AttrRes
 import androidx.annotation.IdRes
 import androidx.annotation.StyleRes
@@ -23,8 +24,8 @@ class StatefulLayout : FrameLayout, StateContainer<Int, State> {
     override val currentStateId: Int
         get() = _currentStateId
 
-    @AnimRes private var defaultEnterAnim: Int = 0
-    @AnimRes private var defaultExitAnim: Int = 0
+    var defaultEnterAnimation: Animation? = null
+    var defaultExitAnimation: Animation? = null
 
     constructor(context: Context) : this(context, null)
 
@@ -80,14 +81,20 @@ class StatefulLayout : FrameLayout, StateContainer<Int, State> {
     }
 
     private fun loadDefaultAnimations(array: TypedArray) {
-        defaultEnterAnim = array.getResourceId(
+        val defaultEnterAnimRes = array.getResourceId(
             R.styleable.StatefulLayout_defaultEnterAnimation,
             0
         )
-        defaultExitAnim = array.getResourceId(
+        if (defaultEnterAnimRes != 0 ) {
+            defaultEnterAnimation = AnimationUtils.loadAnimation(context, defaultEnterAnimRes)
+        }
+        val defaultExitAnimRes = array.getResourceId(
             R.styleable.StatefulLayout_defaultExitAnimation,
             0
         )
+        if (defaultExitAnimRes != 0 ) {
+            defaultExitAnimation = AnimationUtils.loadAnimation(context, defaultExitAnimRes)
+        }
     }
 
     private fun inflateLoadingState(
@@ -157,8 +164,8 @@ class StatefulLayout : FrameLayout, StateContainer<Int, State> {
         val nextState = states[id]
             ?: throw NoSuchElementException("$id was not found in this StatefulLayout.")
 
-        currentState.hide(defaultExitAnim)
-        nextState.show(defaultEnterAnim)
+        currentState.hide(defaultExitAnimation)
+        nextState.show(defaultEnterAnimation)
 
         _currentStateId = id
         return nextState

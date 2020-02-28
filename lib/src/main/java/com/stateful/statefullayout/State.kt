@@ -7,24 +7,53 @@ import android.view.animation.Animation
 import android.view.animation.Animation.AnimationListener
 import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
-import androidx.annotation.AnimRes
 
 class State : FrameLayout {
     lateinit var contentView: View
         private set
 
-    @AnimRes private var enterAnim: Int = 0
-    @AnimRes private var exitAnim: Int = 0
+    var enterAnimation: Animation? = null
+    var exitAnimation: Animation? = null
 
     constructor(context: Context) : this(context, null)
 
-    constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
+    constructor(
+        context: Context,
+        attrs: AttributeSet?
+    ) : this(context, attrs, R.style.Widget_Stateful_State)
 
     constructor(
         context: Context,
         attrs: AttributeSet?,
         defStyle: Int
-    ) : super(context, attrs, defStyle)
+    ) : this(context, attrs, defStyle, R.attr.stateStyle)
+
+    constructor(
+        context: Context,
+        attrs: AttributeSet?,
+        defStyle: Int,
+        defStyleRes: Int
+    ) : super(context, attrs, defStyle, defStyleRes) {
+        val array = context.obtainStyledAttributes(
+            attrs,
+            R.styleable.State,
+            defStyle,
+            defStyleRes
+        )
+        try {
+            val enterAnimRes = array.getResourceId(R.styleable.State_enterAnimation, 0)
+
+            if (enterAnimRes != 0) {
+                enterAnimation = AnimationUtils.loadAnimation(context, enterAnimRes)
+            }
+            val exitAnimRes = array.getResourceId(R.styleable.State_exitAnimation, 0)
+            if (exitAnimRes != 0) {
+                exitAnimation = AnimationUtils.loadAnimation(context, exitAnimRes)
+            }
+        } finally {
+            array.recycle()
+        }
+    }
 
     fun setContentView(view: View) {
         removeAllViews()
@@ -43,23 +72,22 @@ class State : FrameLayout {
         }
     }
 
-    fun show(@AnimRes defaultEnterAnimRes: Int = 0) {
-        animateIfNeededThenUpdateVisibility(enterAnim, defaultEnterAnimRes, View.VISIBLE)
+    fun show(fallbackAnimation: Animation? = null) {
+        animateIfNeededThenUpdateVisibility(enterAnimation, fallbackAnimation, View.VISIBLE)
     }
 
-    fun hide(@AnimRes defaultExitAnimRes: Int = 0) {
-        animateIfNeededThenUpdateVisibility(exitAnim, defaultExitAnimRes, View.GONE)
+    fun hide(fallbackAnimation: Animation? = null) {
+        animateIfNeededThenUpdateVisibility(exitAnimation, fallbackAnimation, View.GONE)
     }
 
     private fun animateIfNeededThenUpdateVisibility(
-        @AnimRes animRes: Int,
-        @AnimRes fallbackAnimRes: Int,
+        animation: Animation?,
+        fallbackAnimation: Animation?,
         targetVisibility: Int
     ) {
-        val appliedAnimRes = if (animRes != 0) animRes else fallbackAnimRes
-        if (appliedAnimRes != 0) {
-            val animation = AnimationUtils.loadAnimation(context, appliedAnimRes)
-            animation.setAnimationListener(object : AnimationListener {
+        val appliedAnimation = animation ?: fallbackAnimation
+        if (appliedAnimation != null) {
+            appliedAnimation.setAnimationListener(object : AnimationListener {
                 override fun onAnimationRepeat(animation: Animation?) {
                     /* no-op */
                 }
@@ -72,7 +100,7 @@ class State : FrameLayout {
                     /* no-op */
                 }
             })
-            startAnimation(animation)
+            startAnimation(appliedAnimation)
         } else {
             visibility = targetVisibility
         }

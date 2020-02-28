@@ -8,4 +8,9 @@
         <attr name="defaultEnterAnimation" format="reference"/>
         <attr name="defaultExitAnimation" format="reference"/>
     </declare-styleable>
+
+    <declare-styleable name="State">
+        <attr name="enterAnimation" format="reference"/>
+        <attr name="exitAnimation" format="reference"/>
+    </declare-styleable>
 </resources>
