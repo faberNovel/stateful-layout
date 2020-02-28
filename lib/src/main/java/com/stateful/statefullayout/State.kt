@@ -5,24 +5,55 @@ import android.util.AttributeSet
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.Animation.AnimationListener
+import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
 
 class State : FrameLayout {
     lateinit var contentView: View
         private set
 
-    private var enterAnim: Animation? = null
-    private var exitAnim: Animation? = null
+    private var enterAnimation: Animation? = null
+    private var exitAnimation: Animation? = null
 
     constructor(context: Context) : this(context, null)
 
-    constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
+    constructor(
+        context: Context,
+        attrs: AttributeSet?
+    ) : this(context, attrs, R.style.Widget_Stateful_State)
 
     constructor(
         context: Context,
         attrs: AttributeSet?,
         defStyle: Int
-    ) : super(context, attrs, defStyle)
+    ) : this(context, attrs, defStyle, R.attr.stateStyle)
+
+    constructor(
+        context: Context,
+        attrs: AttributeSet?,
+        defStyle: Int,
+        defStyleRes: Int
+    ) : super(context, attrs, defStyle, defStyleRes) {
+        val array = context.obtainStyledAttributes(
+            attrs,
+            R.styleable.State,
+            defStyle,
+            defStyleRes
+        )
+        try {
+            val enterAnimRes = array.getResourceId(R.styleable.State_enterAnimation, 0)
+
+            if (enterAnimRes != 0) {
+                enterAnimation = AnimationUtils.loadAnimation(context, enterAnimRes)
+            }
+            val exitAnimRes = array.getResourceId(R.styleable.State_exitAnimation, 0)
+            if (exitAnimRes != 0) {
+                exitAnimation = AnimationUtils.loadAnimation(context, exitAnimRes)
+            }
+        } finally {
+            array.recycle()
+        }
+    }
 
     fun setContentView(view: View) {
         removeAllViews()
@@ -42,11 +73,11 @@ class State : FrameLayout {
     }
 
     fun show(fallbackAnimation: Animation? = null) {
-        animateIfNeededThenUpdateVisibility(enterAnim, fallbackAnimation, View.VISIBLE)
+        animateIfNeededThenUpdateVisibility(enterAnimation, fallbackAnimation, View.VISIBLE)
     }
 
     fun hide(fallbackAnimation: Animation? = null) {
-        animateIfNeededThenUpdateVisibility(exitAnim, fallbackAnimation, View.GONE)
+        animateIfNeededThenUpdateVisibility(exitAnimation, fallbackAnimation, View.GONE)
     }
 
     private fun animateIfNeededThenUpdateVisibility(

@@ -13,12 +13,16 @@
         app:layout_constraintBottom_toTopOf="@id/actions"
         app:layout_constraintTop_toTopOf="parent"
         app:initialState="@id/stateLoading"
+        app:defaultEnterAnimation="@anim/fragment_fade_enter"
+        app:defaultExitAnimation="@anim/fragment_fade_exit"
         >
 
         <com.stateful.statefullayout.State
             android:id="@id/stateContent"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            app:enterAnimation="@anim/fragment_open_enter"
+            app:exitAnimation="@anim/fragment_close_exit"
             >
 
             <TextView
