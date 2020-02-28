@@ -5,16 +5,14 @@ import android.util.AttributeSet
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.Animation.AnimationListener
-import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
-import androidx.annotation.AnimRes
 
 class State : FrameLayout {
     lateinit var contentView: View
         private set
 
-    @AnimRes private var enterAnim: Int = 0
-    @AnimRes private var exitAnim: Int = 0
+    private var enterAnim: Animation? = null
+    private var exitAnim: Animation? = null
 
     constructor(context: Context) : this(context, null)
 
@@ -43,23 +41,22 @@ class State : FrameLayout {
         }
     }
 
-    fun show(@AnimRes defaultEnterAnimRes: Int = 0) {
-        animateIfNeededThenUpdateVisibility(enterAnim, defaultEnterAnimRes, View.VISIBLE)
+    fun show(fallbackAnimation: Animation? = null) {
+        animateIfNeededThenUpdateVisibility(enterAnim, fallbackAnimation, View.VISIBLE)
     }
 
-    fun hide(@AnimRes defaultExitAnimRes: Int = 0) {
-        animateIfNeededThenUpdateVisibility(exitAnim, defaultExitAnimRes, View.GONE)
+    fun hide(fallbackAnimation: Animation? = null) {
+        animateIfNeededThenUpdateVisibility(exitAnim, fallbackAnimation, View.GONE)
     }
 
     private fun animateIfNeededThenUpdateVisibility(
-        @AnimRes animRes: Int,
-        @AnimRes fallbackAnimRes: Int,
+        animation: Animation?,
+        fallbackAnimation: Animation?,
         targetVisibility: Int
     ) {
-        val appliedAnimRes = if (animRes != 0) animRes else fallbackAnimRes
-        if (appliedAnimRes != 0) {
-            val animation = AnimationUtils.loadAnimation(context, appliedAnimRes)
-            animation.setAnimationListener(object : AnimationListener {
+        val appliedAnimation = animation ?: fallbackAnimation
+        if (appliedAnimation != null) {
+            appliedAnimation.setAnimationListener(object : AnimationListener {
                 override fun onAnimationRepeat(animation: Animation?) {
                     /* no-op */
                 }
@@ -72,7 +69,7 @@ class State : FrameLayout {
                     /* no-op */
                 }
             })
-            startAnimation(animation)
+            startAnimation(appliedAnimation)
         } else {
             visibility = targetVisibility
         }
