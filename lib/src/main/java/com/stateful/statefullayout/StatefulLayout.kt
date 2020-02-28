@@ -24,8 +24,8 @@ class StatefulLayout : FrameLayout, StateContainer<Int, State> {
     override val currentStateId: Int
         get() = _currentStateId
 
-    private var defaultEnterAnimation: Animation? = null
-    private var defaultExitAnimation: Animation? = null
+    var defaultEnterAnimation: Animation? = null
+    var defaultExitAnimation: Animation? = null
 
     constructor(context: Context) : this(context, null)
 

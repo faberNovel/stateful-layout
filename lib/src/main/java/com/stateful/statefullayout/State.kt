@@ -12,8 +12,8 @@ class State : FrameLayout {
     lateinit var contentView: View
         private set
 
-    private var enterAnimation: Animation? = null
-    private var exitAnimation: Animation? = null
+    var enterAnimation: Animation? = null
+    var exitAnimation: Animation? = null
 
     constructor(context: Context) : this(context, null)
 
