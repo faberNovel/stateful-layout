@@ -7,13 +7,13 @@ import android.os.Parcelable
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
 import androidx.annotation.AttrRes
 import androidx.annotation.IdRes
 import androidx.annotation.StyleRes
 import androidx.core.view.isVisible
+import com.stateful.statefullayout.transitions.StateTransition
+import com.stateful.statefullayout.transitions.StateTransitions
 
 class StatefulLayout : FrameLayout, StateContainer<Int, State> {
     @IdRes private var initialStateId: Int = R.id.stateContent
@@ -24,8 +24,8 @@ class StatefulLayout : FrameLayout, StateContainer<Int, State> {
     override val currentStateId: Int
         get() = _currentStateId
 
-    var defaultEnterAnimation: Animation? = null
-    var defaultExitAnimation: Animation? = null
+    var defaultEnterAnimation: StateTransition? = null
+    var defaultExitAnimation: StateTransition? = null
 
     constructor(context: Context) : this(context, null)
 
@@ -86,14 +86,14 @@ class StatefulLayout : FrameLayout, StateContainer<Int, State> {
             0
         )
         if (defaultEnterAnimRes != 0) {
-            defaultEnterAnimation = AnimationUtils.loadAnimation(context, defaultEnterAnimRes)
+            defaultEnterAnimation = StateTransitions.ofResource(context, defaultEnterAnimRes)
         }
         val defaultExitAnimRes = array.getResourceId(
             R.styleable.StatefulLayout_defaultExitAnimation,
             0
         )
         if (defaultExitAnimRes != 0) {
-            defaultExitAnimation = AnimationUtils.loadAnimation(context, defaultExitAnimRes)
+            defaultExitAnimation = StateTransitions.ofResource(context, defaultExitAnimRes)
         }
     }
 

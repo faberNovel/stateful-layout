@@ -3,17 +3,17 @@ package com.stateful.statefullayout
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
-import android.view.animation.Animation
-import android.view.animation.Animation.AnimationListener
-import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
+import com.stateful.statefullayout.transitions.StateTransition
+import com.stateful.statefullayout.transitions.StateTransitions
+import com.stateful.statefullayout.transitions.doOnEnd
 
 class State : FrameLayout {
     lateinit var contentView: View
         private set
 
-    var enterAnimation: Animation? = null
-    var exitAnimation: Animation? = null
+    var enterAnimation: StateTransition? = null
+    var exitAnimation: StateTransition? = null
 
     constructor(context: Context) : this(context, null)
 
@@ -44,11 +44,11 @@ class State : FrameLayout {
             val enterAnimRes = array.getResourceId(R.styleable.State_enterAnimation, 0)
 
             if (enterAnimRes != 0) {
-                enterAnimation = AnimationUtils.loadAnimation(context, enterAnimRes)
+                enterAnimation = StateTransitions.ofResource(context, enterAnimRes)
             }
             val exitAnimRes = array.getResourceId(R.styleable.State_exitAnimation, 0)
             if (exitAnimRes != 0) {
-                exitAnimation = AnimationUtils.loadAnimation(context, exitAnimRes)
+                exitAnimation = StateTransitions.ofResource(context, exitAnimRes)
             }
         } finally {
             array.recycle()
@@ -72,35 +72,23 @@ class State : FrameLayout {
         }
     }
 
-    fun show(fallbackAnimation: Animation? = null) {
-        animateIfNeededThenUpdateVisibility(enterAnimation, fallbackAnimation, View.VISIBLE)
+    fun show(fallbackAnimation: StateTransition? = null) {
+        animateIfNeededThenUpdateVisibility(enterAnimation ?: fallbackAnimation, View.VISIBLE)
     }
 
-    fun hide(fallbackAnimation: Animation? = null) {
-        animateIfNeededThenUpdateVisibility(exitAnimation, fallbackAnimation, View.GONE)
+    fun hide(fallbackAnimation: StateTransition? = null) {
+        animateIfNeededThenUpdateVisibility(exitAnimation ?: fallbackAnimation, View.GONE)
     }
 
     private fun animateIfNeededThenUpdateVisibility(
-        animation: Animation?,
-        fallbackAnimation: Animation?,
+        animation: StateTransition?,
         targetVisibility: Int
     ) {
-        val appliedAnimation = animation ?: fallbackAnimation
-        if (appliedAnimation != null) {
-            appliedAnimation.setAnimationListener(object : AnimationListener {
-                override fun onAnimationRepeat(animation: Animation?) {
-                    /* no-op */
-                }
-
-                override fun onAnimationEnd(animation: Animation?) {
-                    visibility = targetVisibility
-                }
-
-                override fun onAnimationStart(animation: Animation?) {
-                    /* no-op */
-                }
-            })
-            startAnimation(appliedAnimation)
+        if (animation != null) {
+            animation.doOnEnd {
+                visibility = targetVisibility
+            }
+            animation.start(this)
         } else {
             visibility = targetVisibility
         }
