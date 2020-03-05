@@ -85,14 +85,14 @@ class StatefulLayout : FrameLayout, StateContainer<Int, State> {
             R.styleable.StatefulLayout_defaultEnterAnimation,
             0
         )
-        if (defaultEnterAnimRes != 0 ) {
+        if (defaultEnterAnimRes != 0) {
             defaultEnterAnimation = AnimationUtils.loadAnimation(context, defaultEnterAnimRes)
         }
         val defaultExitAnimRes = array.getResourceId(
             R.styleable.StatefulLayout_defaultExitAnimation,
             0
         )
-        if (defaultExitAnimRes != 0 ) {
+        if (defaultExitAnimRes != 0) {
             defaultExitAnimation = AnimationUtils.loadAnimation(context, defaultExitAnimRes)
         }
     }
