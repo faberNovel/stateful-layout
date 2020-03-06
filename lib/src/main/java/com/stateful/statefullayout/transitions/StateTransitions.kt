@@ -23,4 +23,7 @@ object StateTransitions {
     fun ofAnimator(animator: Animator): StateTransition = AnimatorStateTransition(animator)
 
     fun ofAnimation(animation: Animation): StateTransition = AnimationStateTransition(animation)
+
+    fun ofCallback(startAnimation: StartAnimationCallback): StateTransition =
+        CallbackStateTransition(startAnimation)
 }
