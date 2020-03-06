@@ -1,25 +1,33 @@
 package com.stateful.statefullayout.transitions
 
 class DefaultTransitionListenerHandler : TransitionListenerHandler {
-    private var listener: StateTransitionListener? = null
+    private val listeners: MutableList<StateTransitionListener> = mutableListOf()
 
-    override fun setListener(stateTransitionListener: StateTransitionListener?) {
-        listener = stateTransitionListener
+    override fun addListener(stateTransitionListener: StateTransitionListener) {
+        listeners.add(stateTransitionListener)
     }
 
-    override fun onTransitionRepeat(transition: StateTransition) {
-        listener?.onTransitionRepeat(transition)
+    override fun removeListener(stateTransitionListener: StateTransitionListener) {
+        listeners.remove(stateTransitionListener)
     }
 
-    override fun onTransitionEnd(transition: StateTransition) {
-        listener?.onTransitionEnd(transition)
+    override fun clearListeners() {
+        listeners.clear()
     }
 
-    override fun onTransitionCancel(transition: StateTransition) {
-        listener?.onTransitionCancel(transition)
+    override fun dispatchTransitionRepeat(transition: StateTransition) {
+        listeners.onEach { listener -> listener.onTransitionRepeat(transition) }
     }
 
-    override fun onTransitionStart(transition: StateTransition) {
-        listener?.onTransitionStart(transition)
+    override fun dispatchTransitionEnd(transition: StateTransition) {
+        listeners.onEach { listener -> listener.onTransitionEnd(transition) }
+    }
+
+    override fun dispatchTransitionCancel(transition: StateTransition) {
+        listeners.onEach { listener -> listener.onTransitionCancel(transition) }
+    }
+
+    override fun dispatchTransitionStart(transition: StateTransition) {
+        listeners.onEach { listener -> listener.onTransitionStart(transition) }
     }
 }
