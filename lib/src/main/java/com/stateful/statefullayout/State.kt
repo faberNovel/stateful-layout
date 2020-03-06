@@ -6,7 +6,6 @@ import android.view.View
 import android.widget.FrameLayout
 import com.stateful.statefullayout.transitions.StateTransition
 import com.stateful.statefullayout.transitions.StateTransitions
-import com.stateful.statefullayout.transitions.doOnEnd
 
 class State : FrameLayout {
     lateinit var contentView: View
@@ -85,10 +84,9 @@ class State : FrameLayout {
         targetVisibility: Int
     ) {
         if (animation != null) {
-            animation.doOnEnd {
+            animation.start(this) {
                 visibility = targetVisibility
             }
-            animation.start(this)
         } else {
             visibility = targetVisibility
         }

@@ -1,5 +1,14 @@
 package com.stateful.statefullayout.transitions
 
+inline fun StateTransition.doOnEndOnce(crossinline action: (transition: StateTransition) -> Unit) {
+    addListener(object : DefaultStateTransitionListener {
+        override fun onTransitionEnd(transition: StateTransition) {
+            action(transition)
+            removeListener(this)
+        }
+    })
+}
+
 inline fun StateTransition.doOnEnd(crossinline action: (transition: StateTransition) -> Unit) =
     setListener(onEnd = action)
 
@@ -24,6 +33,6 @@ inline fun StateTransition.setListener(
         override fun onTransitionCancel(transition: StateTransition) = onCancel(transition)
         override fun onTransitionStart(transition: StateTransition) = onStart(transition)
     }
-    setListener(listener)
+    addListener(listener)
     return listener
 }

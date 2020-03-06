@@ -1,7 +1,6 @@
 package com.stateful.statefullayout.transitions
 
 import android.content.Context
-import android.util.Log
 import android.view.animation.Animation
 import android.view.animation.Animation.AnimationListener
 import android.view.animation.AnimationUtils
@@ -21,23 +20,21 @@ class AnimationStateTransition(
     init {
         animation.setAnimationListener(object : AnimationListener {
             override fun onAnimationRepeat(animation: Animation?) {
-                Log.d("Transition","Animation: Animation repeat")
-                transitionListenerHandler.onTransitionRepeat(this@AnimationStateTransition)
+                transitionListenerHandler.dispatchTransitionRepeat(this@AnimationStateTransition)
             }
 
             override fun onAnimationEnd(animation: Animation?) {
-                Log.d("Transition","Animation: Animation end")
-                transitionListenerHandler.onTransitionEnd(this@AnimationStateTransition)
+                transitionListenerHandler.dispatchTransitionEnd(this@AnimationStateTransition)
             }
 
             override fun onAnimationStart(animation: Animation?) {
-                Log.d("Transition","Animation: Animation start")
-                transitionListenerHandler.onTransitionStart(this@AnimationStateTransition)
+                transitionListenerHandler.dispatchTransitionStart(this@AnimationStateTransition)
             }
         })
     }
 
-    override fun start(state: State) {
+    override fun start(state: State, onTransitionEnd: (State) -> Unit) {
+        doOnEndOnce { onTransitionEnd(state) }
         state.startAnimation(animation)
     }
 }
