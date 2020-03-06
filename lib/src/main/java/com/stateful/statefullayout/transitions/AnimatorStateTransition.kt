@@ -6,7 +6,7 @@ import android.content.Context
 import androidx.annotation.AnimatorRes
 import com.stateful.statefullayout.State
 
-class AnimatorStateTransition(
+internal class AnimatorStateTransition(
     private val animator: Animator,
     private val transitionListenerHandler: TransitionListenerHandler = DefaultTransitionListenerHandler()
 ) : StateTransition, TransitionListenerHandler by transitionListenerHandler {

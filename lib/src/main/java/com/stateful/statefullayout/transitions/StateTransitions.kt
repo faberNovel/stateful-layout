@@ -5,7 +5,18 @@ import android.content.Context
 import android.view.animation.Animation
 import androidx.annotation.AnyRes
 
-object StateTransitions {
+fun animatorStateTransition(animator: Animator) = StateTransitions.ofAnimator(animator)
+
+fun animationStateTransition(animation: Animation) = StateTransitions.ofAnimation(animation)
+
+fun resourceStateTransition(
+    context: Context,
+    @AnyRes res: Int
+) = StateTransitions.ofResource(context, res)
+
+fun stateTransition(transition: StateTransitionCallback) = StateTransitions.ofCallback(transition)
+
+internal object StateTransitions {
     private const val ANIMATOR_RES = "animator"
     private const val ANIMATION_RES = "anim"
 
@@ -24,6 +35,6 @@ object StateTransitions {
 
     fun ofAnimation(animation: Animation): StateTransition = AnimationStateTransition(animation)
 
-    fun ofCallback(startAnimation: StartAnimationCallback): StateTransition =
-        CallbackStateTransition(startAnimation)
+    fun ofCallback(stateTransition: StateTransitionCallback): StateTransition =
+        CallbackStateTransition(stateTransition)
 }
