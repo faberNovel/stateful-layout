@@ -33,8 +33,8 @@ internal class AnimationStateTransition(
         })
     }
 
-    override fun start(state: State, onTransitionEnd: (State) -> Unit) {
-        doOnEndOnce { onTransitionEnd(state) }
+    override fun start(state: State, onTransitionEnd: () -> Unit) {
+        doOnEndOnce { onTransitionEnd() }
         state.startAnimation(animation)
     }
 }
