@@ -71,11 +71,11 @@ class State : FrameLayout {
         }
     }
 
-    fun show(fallbackAnimation: StateTransition? = null) {
+    internal fun show(fallbackAnimation: StateTransition? = null) {
         animateIfNeededThenUpdateVisibility(enterAnimation ?: fallbackAnimation, View.VISIBLE)
     }
 
-    fun hide(fallbackAnimation: StateTransition? = null) {
+    internal fun hide(fallbackAnimation: StateTransition? = null) {
         animateIfNeededThenUpdateVisibility(exitAnimation ?: fallbackAnimation, View.GONE)
     }
 
