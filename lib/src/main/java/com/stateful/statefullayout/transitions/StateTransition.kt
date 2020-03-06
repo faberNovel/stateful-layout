@@ -8,4 +8,3 @@ interface StateTransition : TransitionListenerHandler {
         onTransitionEnd: () -> Unit
     )
 }
-
