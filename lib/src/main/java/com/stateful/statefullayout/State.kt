@@ -12,8 +12,8 @@ class State : FrameLayout {
     lateinit var contentView: View
         private set
 
-    var enterAnimation: StateTransition? = null
-    var exitAnimation: StateTransition? = null
+    var enterTransition: StateTransition? = null
+    var exitTransition: StateTransition? = null
 
     constructor(context: Context) : this(context, null)
 
@@ -41,14 +41,14 @@ class State : FrameLayout {
             defStyleRes
         )
         try {
-            val enterAnimRes = array.getResourceId(R.styleable.State_enterAnimation, 0)
+            val enterAnimRes = array.getResourceId(R.styleable.State_enterTransition, 0)
 
             if (enterAnimRes != 0) {
-                enterAnimation = StateTransitions.fromResource(context, enterAnimRes)
+                enterTransition = StateTransitions.fromResource(context, enterAnimRes)
             }
-            val exitAnimRes = array.getResourceId(R.styleable.State_exitAnimation, 0)
+            val exitAnimRes = array.getResourceId(R.styleable.State_exitTransition, 0)
             if (exitAnimRes != 0) {
-                exitAnimation = StateTransitions.fromResource(context, exitAnimRes)
+                exitTransition = StateTransitions.fromResource(context, exitAnimRes)
             }
         } finally {
             array.recycle()
@@ -72,12 +72,12 @@ class State : FrameLayout {
         }
     }
 
-    internal fun show(fallbackAnimation: StateTransition? = null) {
-        val animation = enterAnimation ?: fallbackAnimation
-        if (animation == null) {
+    internal fun show(fallbackTransition: StateTransition? = null) {
+        val transition = enterTransition ?: fallbackTransition
+        if (transition == null) {
             visibility = View.VISIBLE
         } else {
-            animation.start(this, object : DefaultStateTransitionListener {
+            transition.start(this, object : DefaultStateTransitionListener {
                 override fun onTransitionStart(transition: StateTransition) {
                     visibility = View.VISIBLE
                 }
@@ -85,12 +85,12 @@ class State : FrameLayout {
         }
     }
 
-    internal fun hide(fallbackAnimation: StateTransition? = null) {
-        val animation = exitAnimation ?: fallbackAnimation
-        if (animation == null) {
+    internal fun hide(fallbackTransition: StateTransition? = null) {
+        val transition = exitTransition ?: fallbackTransition
+        if (transition == null) {
             visibility = View.GONE
         } else {
-            animation.start(this, object : DefaultStateTransitionListener {
+            transition.start(this, object : DefaultStateTransitionListener {
                 override fun onTransitionEnd(transition: StateTransition) {
                     visibility = View.GONE
                 }
