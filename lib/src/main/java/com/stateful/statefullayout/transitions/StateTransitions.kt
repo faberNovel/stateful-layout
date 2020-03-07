@@ -4,7 +4,17 @@ import android.animation.Animator
 import android.content.Context
 import android.view.animation.Animation
 import androidx.annotation.AnyRes
+import com.stateful.statefullayout.transitions.StateTransitions.fromAnimation
+import com.stateful.statefullayout.transitions.StateTransitions.fromAnimator
+import com.stateful.statefullayout.transitions.StateTransitions.fromResource
 
+/**
+ * Helper object to create state transitions
+ * @property fromResource create a [StateTransition] from a [androidx.annotation.AnimatorRes]
+ * or [androidx.annotation.AnimRes] resource.
+ * @property fromAnimation create a state transition from an [Animation].
+ * @property fromAnimator create a state transition from an [Animator].
+ */
 object StateTransitions {
     private const val ANIMATOR_RES = "animator"
     private const val ANIMATION_RES = "anim"
