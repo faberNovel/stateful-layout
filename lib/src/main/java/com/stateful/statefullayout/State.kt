@@ -9,6 +9,7 @@ import com.stateful.statefullayout.transitions.StateTransition
 import com.stateful.statefullayout.transitions.StateTransitions
 
 class State : FrameLayout {
+    private var currentTransition: StateTransition? = null
     lateinit var contentView: View
         private set
 
@@ -73,10 +74,12 @@ class State : FrameLayout {
     }
 
     internal fun show(fallbackTransition: StateTransition? = null) {
+        currentTransition?.cancel()
         val transition = enterTransition ?: fallbackTransition
         if (transition == null) {
             visibility = View.VISIBLE
         } else {
+            currentTransition = transition
             transition.start(this, object : DefaultStateTransitionListener {
                 override fun onTransitionStart(transition: StateTransition) {
                     visibility = View.VISIBLE
@@ -86,10 +89,12 @@ class State : FrameLayout {
     }
 
     internal fun hide(fallbackTransition: StateTransition? = null) {
+        currentTransition?.cancel()
         val transition = exitTransition ?: fallbackTransition
         if (transition == null) {
             visibility = View.GONE
         } else {
+            currentTransition = transition
             transition.start(this, object : DefaultStateTransitionListener {
                 override fun onTransitionEnd(transition: StateTransition) {
                     visibility = View.GONE

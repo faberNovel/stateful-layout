@@ -17,4 +17,5 @@ interface StateTransition : TransitionListenerHandler {
      * @param listener [StateTransitionListener] used to update [State] visibility.
      */
     fun start(state: State, listener: StateTransitionListener)
+    fun cancel()
 }

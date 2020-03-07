@@ -5,10 +5,16 @@ import com.stateful.statefullayout.State
 internal typealias StateTransitionCallback = (StateTransition, StateTransitionListener) -> Unit
 
 internal class CallbackStateTransition(
-    private val stateTransition: StateTransitionCallback,
+    private val startTransition: StateTransitionCallback,
+    private val onCancel: () -> Unit,
     private val transitionListenerHandler: TransitionListenerHandler = DefaultTransitionListenerHandler()
 ) : StateTransition, TransitionListenerHandler by transitionListenerHandler {
     override fun start(state: State, listener: StateTransitionListener) {
-        stateTransition(this, addListenerAndRemoveOnEnd(listener))
+        startTransition(this, addListenerAndRemoveOnEnd(listener))
+    }
+
+    override fun cancel() {
+        onCancel()
+        transitionListenerHandler.dispatchTransitionCancel(this)
     }
 }

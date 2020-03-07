@@ -40,4 +40,8 @@ internal class AnimatorStateTransition(
         addListenerAndRemoveOnEnd(listener)
         animator.start()
     }
+
+    override fun cancel() {
+        animator.cancel()
+    }
 }

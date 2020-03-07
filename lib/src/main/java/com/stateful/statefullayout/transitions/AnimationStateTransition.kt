@@ -34,7 +34,12 @@ internal class AnimationStateTransition(
     }
 
     override fun start(state: State, listener: StateTransitionListener) {
+        animation.reset()
         addListenerAndRemoveOnEnd(listener)
         state.startAnimation(animation)
+    }
+
+    override fun cancel() {
+        animation.cancel()
     }
 }

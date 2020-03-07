@@ -34,6 +34,9 @@ object StateTransitions {
 
     fun fromAnimation(animation: Animation): StateTransition = AnimationStateTransition(animation)
 
-    fun fromCallback(stateTransition: StateTransitionCallback): StateTransition =
-        CallbackStateTransition(stateTransition)
+    fun fromCallback(
+        onStart: StateTransitionCallback,
+        onCancel: () -> Unit
+    ): StateTransition =
+        CallbackStateTransition(onStart, onCancel)
 }
