@@ -56,54 +56,60 @@ class MainFragment : Fragment() {
     }
 
     private fun MainFragmentBinding.buildExitTransition(): StateTransition {
-        return StateTransitions.fromCallback { transition, listener ->
-            icon.translationY = 0f
-            text.translationX = 0f
-            stateContent.alpha = 1f
+        val iconAnimator = ObjectAnimator
+            .ofFloat(icon, "translationY", 0f, TARGET_TRANSLATION)
+        val textAnimator = ObjectAnimator
+            .ofFloat(text, "translationX", 0f, TARGET_TRANSLATION)
+        val backgroundAnimator = ObjectAnimator
+            .ofFloat(stateContent, "alpha", 1f, 0f)
 
-            val iconAnimator = ObjectAnimator
-                .ofFloat(icon, "translationY", 0f, TARGET_TRANSLATION)
-            val textAnimator = ObjectAnimator
-                .ofFloat(text, "translationX", 0f, TARGET_TRANSLATION)
-            val backgroundAnimator = ObjectAnimator
-                .ofFloat(stateContent, "alpha", 1f, 0f)
-
-            val animator = AnimatorSet().apply {
-                play(iconAnimator).with(textAnimator)
-                    .before(backgroundAnimator)
-            }
-            animator.addListener(
-                onStart = { listener.onTransitionStart(transition) },
-                onEnd = { listener.onTransitionEnd(transition) }
-            )
-            animator.start()
+        val animator = AnimatorSet().apply {
+            play(iconAnimator).with(textAnimator)
+                .before(backgroundAnimator)
         }
+        return StateTransitions.fromCallback(
+            onStart = { transition, listener ->
+                icon.translationY = 0f
+                text.translationX = 0f
+                stateContent.alpha = 1f
+
+                animator.addListener(
+                    onStart = { listener.onTransitionStart(transition) },
+                    onEnd = { listener.onTransitionEnd(transition) }
+                )
+                animator.start()
+            },
+            onCancel = animator::cancel
+        )
     }
 
     private fun MainFragmentBinding.buildEnterTransition(): StateTransition {
-        return StateTransitions.fromCallback { transition, listener ->
-            icon.translationY = TARGET_TRANSLATION
-            text.translationX = TARGET_TRANSLATION
-            stateContent.alpha = 0f
+        val iconAnimator = ObjectAnimator
+            .ofFloat(icon, "translationY", TARGET_TRANSLATION, 0f)
+        val textAnimator = ObjectAnimator
+            .ofFloat(text, "translationX", TARGET_TRANSLATION, 0f)
+        val backgroundAnimator = ObjectAnimator
+            .ofFloat(stateContent, "alpha", 0f, 1f)
 
-            val iconAnimator = ObjectAnimator
-                .ofFloat(icon, "translationY", TARGET_TRANSLATION, 0f)
-            val textAnimator = ObjectAnimator
-                .ofFloat(text, "translationX", TARGET_TRANSLATION, 0f)
-            val backgroundAnimator = ObjectAnimator
-                .ofFloat(stateContent, "alpha", 0f, 1f)
-
-            val animator = AnimatorSet().apply {
-                play(iconAnimator)
-                    .with(textAnimator)
-                    .after(backgroundAnimator)
-            }
-            animator.addListener(
-                onStart = { listener.onTransitionStart(transition) },
-                onEnd = { listener.onTransitionEnd(transition) }
-            )
-            animator.start()
+        val animator = AnimatorSet().apply {
+            play(iconAnimator)
+                .with(textAnimator)
+                .after(backgroundAnimator)
         }
+        return StateTransitions.fromCallback(
+            onStart = { transition, listener ->
+                icon.translationY = TARGET_TRANSLATION
+                text.translationX = TARGET_TRANSLATION
+                stateContent.alpha = 0f
+
+                animator.addListener(
+                    onStart = { listener.onTransitionStart(transition) },
+                    onEnd = { listener.onTransitionEnd(transition) }
+                )
+                animator.start()
+            },
+            onCancel = animator::cancel
+        )
     }
 
     override fun onDestroyView() {
