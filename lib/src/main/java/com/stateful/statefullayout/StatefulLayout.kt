@@ -24,8 +24,8 @@ class StatefulLayout : FrameLayout, StateContainer<Int, State> {
     override val currentStateId: Int
         get() = _currentStateId
 
-    var defaultEnterAnimation: StateTransition? = null
-    var defaultExitAnimation: StateTransition? = null
+    var defaultEnterTransition: StateTransition? = null
+    var defaultExitTransition: StateTransition? = null
 
     constructor(context: Context) : this(context, null)
 
@@ -82,18 +82,18 @@ class StatefulLayout : FrameLayout, StateContainer<Int, State> {
 
     private fun loadDefaultAnimations(array: TypedArray) {
         val defaultEnterAnimRes = array.getResourceId(
-            R.styleable.StatefulLayout_defaultEnterAnimation,
+            R.styleable.StatefulLayout_defaultEnterTransition,
             0
         )
         if (defaultEnterAnimRes != 0) {
-            defaultEnterAnimation = StateTransitions.fromResource(context, defaultEnterAnimRes)
+            defaultEnterTransition = StateTransitions.fromResource(context, defaultEnterAnimRes)
         }
         val defaultExitAnimRes = array.getResourceId(
-            R.styleable.StatefulLayout_defaultExitAnimation,
+            R.styleable.StatefulLayout_defaultExitrTransition,
             0
         )
         if (defaultExitAnimRes != 0) {
-            defaultExitAnimation = StateTransitions.fromResource(context, defaultExitAnimRes)
+            defaultExitTransition = StateTransitions.fromResource(context, defaultExitAnimRes)
         }
     }
 
@@ -164,8 +164,8 @@ class StatefulLayout : FrameLayout, StateContainer<Int, State> {
         val nextState = states[id]
             ?: throw NoSuchElementException("$id was not found in this StatefulLayout.")
 
-        currentState.hide(defaultExitAnimation)
-        nextState.show(defaultEnterAnimation)
+        currentState.hide(defaultExitTransition)
+        nextState.show(defaultEnterTransition)
 
         _currentStateId = id
         return nextState

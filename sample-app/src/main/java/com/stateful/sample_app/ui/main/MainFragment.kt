@@ -39,8 +39,8 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         with(binding) {
-            stateContent.enterAnimation = buildEnterAnimation()
-            stateContent.exitAnimation = buildExitAnimation()
+            stateContent.enterTransition = buildEnterTransition()
+            stateContent.exitTransition = buildExitTransition()
             errorButton.setOnClickListener {
                 statefulLayout.showError {
                     Toast.makeText(context, "Retry", Toast.LENGTH_SHORT).show()
@@ -55,7 +55,7 @@ class MainFragment : Fragment() {
         }
     }
 
-    private fun MainFragmentBinding.buildExitAnimation(): StateTransition {
+    private fun MainFragmentBinding.buildExitTransition(): StateTransition {
         return StateTransitions.fromCallback { transition, listener ->
             icon.translationY = 0f
             text.translationX = 0f
@@ -80,7 +80,7 @@ class MainFragment : Fragment() {
         }
     }
 
-    private fun MainFragmentBinding.buildEnterAnimation(): StateTransition {
+    private fun MainFragmentBinding.buildEnterTransition(): StateTransition {
         return StateTransitions.fromCallback { transition, listener ->
             icon.translationY = TARGET_TRANSLATION
             text.translationX = TARGET_TRANSLATION
