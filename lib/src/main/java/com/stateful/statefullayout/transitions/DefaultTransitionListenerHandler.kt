@@ -16,18 +16,26 @@ class DefaultTransitionListenerHandler : TransitionListenerHandler {
     }
 
     override fun dispatchTransitionRepeat(transition: StateTransition) {
-        listeners.onEach { listener -> listener.onTransitionRepeat(transition) }
+        for (listener in listeners) {
+            listener.onTransitionRepeat(transition)
+        }
     }
 
     override fun dispatchTransitionEnd(transition: StateTransition) {
-        listeners.onEach { listener -> listener.onTransitionEnd(transition) }
+        for (listener in listeners) {
+            listener.onTransitionEnd(transition)
+        }
     }
 
     override fun dispatchTransitionCancel(transition: StateTransition) {
-        listeners.onEach { listener -> listener.onTransitionCancel(transition) }
+        for (listener in listeners) {
+            listener.onTransitionCancel(transition)
+        }
     }
 
     override fun dispatchTransitionStart(transition: StateTransition) {
-        listeners.onEach { listener -> listener.onTransitionStart(transition) }
+        for (listener in listeners) {
+            listener.onTransitionStart(transition)
+        }
     }
 }

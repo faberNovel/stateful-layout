@@ -1,12 +1,28 @@
 package com.stateful.statefullayout.transitions
 
-inline fun StateTransition.doOnEndOnce(crossinline action: (transition: StateTransition) -> Unit) {
-    addListener(object : DefaultStateTransitionListener {
+inline fun StateTransition.addListenerAndRemoveOnEnd(
+    listener: StateTransitionListener
+): StateTransitionListener {
+    val stateTransitionListener = object : StateTransitionListener {
+        override fun onTransitionRepeat(transition: StateTransition) {
+            listener.onTransitionRepeat(transition)
+        }
+
         override fun onTransitionEnd(transition: StateTransition) {
-            action(transition)
+            listener.onTransitionEnd(transition)
             removeListener(this)
         }
-    })
+
+        override fun onTransitionCancel(transition: StateTransition) {
+            listener.onTransitionCancel(transition)
+        }
+
+        override fun onTransitionStart(transition: StateTransition) {
+            listener.onTransitionStart(transition)
+        }
+    }
+    addListener(stateTransitionListener)
+    return stateTransitionListener
 }
 
 inline fun StateTransition.doOnEnd(crossinline action: (transition: StateTransition) -> Unit) =
