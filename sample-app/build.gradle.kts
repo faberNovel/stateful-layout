@@ -1,4 +1,7 @@
 import org.jetbrains.kotlin.config.KotlinCompilerVersion
+import statefullayout.compileSdk
+import statefullayout.minSdk
+import statefullayout.targetSdk
 
 plugins {
     id("com.android.application")
@@ -7,18 +10,14 @@ plugins {
 }
 
 android {
-    compileSdkVersion(29)
-    buildToolsVersion("29.0.2")
+    compileSdkVersion(project.compileSdk)
 
     viewBinding.isEnabled = true
 
     defaultConfig {
         applicationId = "com.stateful.sample_app"
-        minSdkVersion(21)
-        targetSdkVersion(29)
-        versionCode = 1
-        versionName = "1.0"
-
+        minSdkVersion(project.minSdk)
+        targetSdkVersion(project.targetSdk)
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -30,15 +29,6 @@ android {
                 "proguard-rules.pro"
             )
         }
-    }
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-
-    kotlinOptions {
-        jvmTarget = "1.8"
     }
 
 }

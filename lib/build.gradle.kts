@@ -1,25 +1,33 @@
+import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.config.KotlinCompilerVersion
+import statefullayout.bintrayKey
+import statefullayout.bintrayUser
+import statefullayout.compileSdk
+import statefullayout.minSdk
+import statefullayout.targetSdk
 
 plugins {
     id("com.android.library")
+    id("com.vanniktech.maven.publish")
+    id("com.jfrog.bintray")
     kotlin("android")
     kotlin("android.extensions")
+    id("org.jetbrains.dokka")
 }
 
 android {
-    compileSdkVersion(29)
-    buildToolsVersion("29.0.2")
-
-    viewBinding.isEnabled = true
+    compileSdkVersion(project.compileSdk)
 
     defaultConfig {
-        minSdkVersion(21)
-        targetSdkVersion(29)
-        versionCode = 1
-        versionName = "1.0"
+        minSdkVersion(project.minSdk)
+        targetSdkVersion(project.targetSdk)
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
+    libraryVariants.all {
+        generateBuildConfigProvider?.configure { enabled = false }
+    }
+    viewBinding.isEnabled = true
 
     buildTypes {
         getByName("release") {
@@ -35,14 +43,35 @@ android {
         getByName("main").java.srcDirs("src/main/ktx")
         getByName("main").res.srcDirs("src/main/res-public")
     }
+}
 
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
+mavenPublish {
+    useLegacyMode = false
+}
 
-    kotlinOptions {
-        jvmTarget = "1.8"
+bintray {
+    user = bintrayUser
+    key = bintrayKey
+    pkg(delegateClosureOf<com.jfrog.bintray.gradle.BintrayExtension.PackageConfig> {
+        repo = "maven"
+        name = "stateful-layout"
+        setLicenses("Apache-2.0")
+        vcsUrl = "https://github.com/faberNovel/stateful-layout"
+        issueTrackerUrl = "https://github.com/faberNovel/stateful-layout/issues"
+        githubRepo = "faberNovel/stateful-layout"
+        setLabels("kotlin", "android")
+        version(delegateClosureOf<com.jfrog.bintray.gradle.BintrayExtension.VersionConfig> {
+            name = project.version.toString()
+            desc = "v.${project.version}"
+        })
+    })
+
+}
+
+afterEvaluate {
+    tasks.withType<DokkaTask> {
+        outputDirectory = "$rootDir/docs/api"
+        outputFormat = "gfm"
     }
 }
 
