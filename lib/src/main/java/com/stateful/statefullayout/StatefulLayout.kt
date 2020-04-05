@@ -7,13 +7,13 @@ import android.os.Parcelable
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
 import androidx.annotation.AttrRes
 import androidx.annotation.IdRes
 import androidx.annotation.StyleRes
 import androidx.core.view.isVisible
+import com.stateful.statefullayout.transitions.StateTransition
+import com.stateful.statefullayout.transitions.StateTransitions
 
 class StatefulLayout : FrameLayout, StateContainer<Int, State> {
     @IdRes private var initialStateId: Int = R.id.stateContent
@@ -24,8 +24,8 @@ class StatefulLayout : FrameLayout, StateContainer<Int, State> {
     override val currentStateId: Int
         get() = _currentStateId
 
-    var defaultEnterAnimation: Animation? = null
-    var defaultExitAnimation: Animation? = null
+    var defaultEnterTransition: StateTransition? = null
+    var defaultExitTransition: StateTransition? = null
 
     constructor(context: Context) : this(context, null)
 
@@ -82,18 +82,18 @@ class StatefulLayout : FrameLayout, StateContainer<Int, State> {
 
     private fun loadDefaultAnimations(array: TypedArray) {
         val defaultEnterAnimRes = array.getResourceId(
-            R.styleable.StatefulLayout_defaultEnterAnimation,
+            R.styleable.StatefulLayout_defaultEnterTransition,
             0
         )
-        if (defaultEnterAnimRes != 0 ) {
-            defaultEnterAnimation = AnimationUtils.loadAnimation(context, defaultEnterAnimRes)
+        if (defaultEnterAnimRes != 0) {
+            defaultEnterTransition = StateTransitions.fromResource(context, defaultEnterAnimRes)
         }
         val defaultExitAnimRes = array.getResourceId(
-            R.styleable.StatefulLayout_defaultExitAnimation,
+            R.styleable.StatefulLayout_defaultExitrTransition,
             0
         )
-        if (defaultExitAnimRes != 0 ) {
-            defaultExitAnimation = AnimationUtils.loadAnimation(context, defaultExitAnimRes)
+        if (defaultExitAnimRes != 0) {
+            defaultExitTransition = StateTransitions.fromResource(context, defaultExitAnimRes)
         }
     }
 
@@ -164,8 +164,8 @@ class StatefulLayout : FrameLayout, StateContainer<Int, State> {
         val nextState = states[id]
             ?: throw NoSuchElementException("$id was not found in this StatefulLayout.")
 
-        currentState.hide(defaultExitAnimation)
-        nextState.show(defaultEnterAnimation)
+        currentState.hide(defaultExitTransition)
+        nextState.show(defaultEnterTransition)
 
         _currentStateId = id
         return nextState

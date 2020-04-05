@@ -3,17 +3,18 @@ package com.stateful.statefullayout
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
-import android.view.animation.Animation
-import android.view.animation.Animation.AnimationListener
-import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
+import com.stateful.statefullayout.transitions.DefaultStateTransitionListener
+import com.stateful.statefullayout.transitions.StateTransition
+import com.stateful.statefullayout.transitions.StateTransitions
 
 class State : FrameLayout {
+    private var currentTransition: StateTransition? = null
     lateinit var contentView: View
         private set
 
-    var enterAnimation: Animation? = null
-    var exitAnimation: Animation? = null
+    var enterTransition: StateTransition? = null
+    var exitTransition: StateTransition? = null
 
     constructor(context: Context) : this(context, null)
 
@@ -41,14 +42,14 @@ class State : FrameLayout {
             defStyleRes
         )
         try {
-            val enterAnimRes = array.getResourceId(R.styleable.State_enterAnimation, 0)
+            val enterAnimRes = array.getResourceId(R.styleable.State_enterTransition, 0)
 
             if (enterAnimRes != 0) {
-                enterAnimation = AnimationUtils.loadAnimation(context, enterAnimRes)
+                enterTransition = StateTransitions.fromResource(context, enterAnimRes)
             }
-            val exitAnimRes = array.getResourceId(R.styleable.State_exitAnimation, 0)
+            val exitAnimRes = array.getResourceId(R.styleable.State_exitTransition, 0)
             if (exitAnimRes != 0) {
-                exitAnimation = AnimationUtils.loadAnimation(context, exitAnimRes)
+                exitTransition = StateTransitions.fromResource(context, exitAnimRes)
             }
         } finally {
             array.recycle()
@@ -72,37 +73,33 @@ class State : FrameLayout {
         }
     }
 
-    fun show(fallbackAnimation: Animation? = null) {
-        animateIfNeededThenUpdateVisibility(enterAnimation, fallbackAnimation, View.VISIBLE)
-    }
-
-    fun hide(fallbackAnimation: Animation? = null) {
-        animateIfNeededThenUpdateVisibility(exitAnimation, fallbackAnimation, View.GONE)
-    }
-
-    private fun animateIfNeededThenUpdateVisibility(
-        animation: Animation?,
-        fallbackAnimation: Animation?,
-        targetVisibility: Int
-    ) {
-        val appliedAnimation = animation ?: fallbackAnimation
-        if (appliedAnimation != null) {
-            appliedAnimation.setAnimationListener(object : AnimationListener {
-                override fun onAnimationRepeat(animation: Animation?) {
-                    /* no-op */
-                }
-
-                override fun onAnimationEnd(animation: Animation?) {
-                    visibility = targetVisibility
-                }
-
-                override fun onAnimationStart(animation: Animation?) {
-                    /* no-op */
+    internal fun show(fallbackTransition: StateTransition? = null) {
+        currentTransition?.cancel()
+        val transition = enterTransition ?: fallbackTransition
+        if (transition == null) {
+            visibility = View.VISIBLE
+        } else {
+            currentTransition = transition
+            transition.start(this, object : DefaultStateTransitionListener {
+                override fun onTransitionStart(transition: StateTransition) {
+                    visibility = View.VISIBLE
                 }
             })
-            startAnimation(appliedAnimation)
+        }
+    }
+
+    internal fun hide(fallbackTransition: StateTransition? = null) {
+        currentTransition?.cancel()
+        val transition = exitTransition ?: fallbackTransition
+        if (transition == null) {
+            visibility = View.GONE
         } else {
-            visibility = targetVisibility
+            currentTransition = transition
+            transition.start(this, object : DefaultStateTransitionListener {
+                override fun onTransitionEnd(transition: StateTransition) {
+                    visibility = View.GONE
+                }
+            })
         }
     }
 

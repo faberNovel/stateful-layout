@@ -10,29 +10,51 @@
         android:id="@+id/statefulLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        app:defaultEnterTransition="@anim/fragment_fade_enter"
+        app:defaultExitrTransition="@anim/fragment_fade_exit"
+        app:initialState="@id/stateLoading"
         app:layout_constraintBottom_toTopOf="@id/actions"
         app:layout_constraintTop_toTopOf="parent"
-        app:initialState="@id/stateLoading"
-        app:defaultEnterAnimation="@anim/fragment_fade_enter"
-        app:defaultExitAnimation="@anim/fragment_fade_exit"
         >
 
         <com.stateful.statefullayout.State
             android:id="@id/stateContent"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:enterAnimation="@anim/fragment_open_enter"
-            app:exitAnimation="@anim/fragment_close_exit"
+            app:enterTransition="@anim/fragment_open_enter"
+            app:exitTransition="@anim/fragment_close_exit"
             >
 
-            <TextView
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/colorAccent"
-                android:gravity="center"
-                android:text="Content state"
-                android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                />
+                >
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_android"
+                    app:layout_constraintBottom_toTopOf="@id/text"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_chainStyle="packed"
+                    />
+
+                <TextView
+                    android:id="@+id/text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Content state"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/icon"
+                    />
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </com.stateful.statefullayout.State>
     </com.stateful.statefullayout.StatefulLayout>
 
