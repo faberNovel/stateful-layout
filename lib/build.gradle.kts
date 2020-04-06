@@ -5,7 +5,11 @@ plugins {
     id("com.android.library")
     kotlin("android")
     kotlin("android.extensions")
+    id("com.github.dcendents.android-maven")
 }
+
+// For library publishing on jitpack
+group="com.github.faberNovel"
 
 android {
     compileSdkVersion(29)
