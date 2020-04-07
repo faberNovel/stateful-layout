@@ -15,6 +15,6 @@ repositories {
 Add the dependency: 
 ```
 dependencies {
-	implementation 'com.github.fabernovel:stateful-layout:Tag'
+	implementation 'com.github.fabernovel:stateful-layout:<Version>'
 }
 ```
