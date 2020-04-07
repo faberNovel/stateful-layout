@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     >
 
-    <com.stateful.statefullayout.StatefulLayout
+    <com.fabernovel.statefullayout.StatefulLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:initialState="@id/stateLoading"

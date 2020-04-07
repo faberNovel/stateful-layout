@@ -9,7 +9,7 @@ android {
     viewBinding.enabled = true
 
     defaultConfig {
-        applicationId "com.stateful.sample_app"
+        applicationId "com.fabenovel.statefullayout.sample"
         minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
