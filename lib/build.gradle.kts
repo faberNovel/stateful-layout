@@ -1,4 +1,3 @@
-import org.jetbrains.kotlin.cli.jvm.main
 import org.jetbrains.kotlin.config.KotlinCompilerVersion
 
 plugins {
@@ -9,7 +8,7 @@ plugins {
 }
 
 // For library publishing on jitpack
-group="com.github.faberNovel"
+group = "com.github.faberNovel"
 
 android {
     compileSdkVersion(29)
@@ -59,7 +58,6 @@ dependencies {
     implementation("androidx.appcompat", "appcompat", "1.1.0")
     implementation("androidx.constraintlayout", "constraintlayout", "1.1.3")
     implementation("androidx.core", "core-ktx", "1.2.0")
-
 
     testImplementation("junit", "junit", "4.12")
     androidTestImplementation("androidx.test.ext", "junit", "1.1.1")
