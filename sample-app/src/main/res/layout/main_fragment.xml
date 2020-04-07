@@ -16,6 +16,12 @@
         app:layout_constraintBottom_toTopOf="@id/actions"
         app:layout_constraintTop_toTopOf="parent"
         >
+        <com.fabernovel.statefullayout.State
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/stateLoading"
+            android:background="@color/colorPrimary"
+            />
 
         <com.fabernovel.statefullayout.State
             android:id="@id/stateContent"
