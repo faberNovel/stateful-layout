@@ -22,13 +22,15 @@ dependencies {
 ```
 
 ## Usage
-StatefulLayout allows to create differents state for a screen (loading state, content state, missing permission state, etc).
-States are references by an android resource id. 
+StatefulLayout allows to create different state for a screen (loading state, content state, missing permission state, etc).
+States are referenced using an android resource id. 
 
 ### StatefulLayout
 
-`StatefulLayout` is a view group that can only contain a set of `State`. Each `State` must have an id which will be used to display them when needed. 
-To use it, you only need to add it to a layout and put a `State` with `android:id="@id/stateContent` to define you normal content state.
+`StatefulLayout` is a view group containing a set of `State`. 
+Each `State` must have an id which will be used to display them when needed. 
+
+To use it, add a `StatefulLayout` to a layout and put a `State` with `android:id="@id/stateContent` to define the normal content state.
 ``` XML
  <com.fabernovel.statefullayout.StatefulLayout
         android:id="@+id/statefulLayout"
@@ -50,11 +52,11 @@ To use it, you only need to add it to a layout and put a `State` with `android:i
 ```
 
 #### Default states: 
-By default, three state are provided: 
+By default, three states are provided: 
 1. Loading state: `stateLoading`:
   A progress bar in the middle of the screen.
 2. Content state: `stateContent`
-  Your view content
+  The normal content screen
 3. Error state: `stateError`
   An error screen with a retry button
 
@@ -81,12 +83,12 @@ For example to create a custom error state:
         </com.fabernovel.statefullayout.State>
     </com.fabernovel.statefullayout.StatefulLayout>
 ```
-2. Pass a layout resource to a `StatefulLayout` style attribute:
-  - `loadingStateLayout` for the loading state.
-  - `errorStateLayout` for the error state.
+2. Pass a layout resource to a `StatefulLayout` layout view:
+  - `app:loadingStateLayout` for the loading state.
+  - `app:errorStateLayout` for the error state.
   
 #### Custom state:
-To add a custom state you only have to add a `State` inside your `StatefulLayout`.
+To add a custom state, add a `State` inside a `StatefulLayout`.
 *Warnings*: 
 - State can only have *one* child view
 - State *must* have an id. 
@@ -94,18 +96,18 @@ To add a custom state you only have to add a `State` inside your `StatefulLayout
 `State` can also be added programmatically to a `StatefulLayout` (they still need to have an id).
 
 #### Change the displayed state:
-To change the displayed state, you must call `showState(@IdRes id: Int)` with your state's id. 
+To change the displayed state, call `showState(@IdRes id: Int)` with your state's id. 
 Default state also have their kotlin extensions for convenience:
 - `showError(onRetryListener: ((View) -> Unit = {})?)` 
 - `showLoading()`
 - `showContent()`
 
 #### Add listeners to state's views
-If the state is in your layout you can easily access it like any other view. 
-To access views from layout that are inflating by the `StatefulLayout`, the recommended way is to
+If the state is in a layout, it can be accessed like any other view. 
+To access views from layout that are inflated by the `StatefulLayout`, the recommended way is to
 use Android View Binding. (https://developer.android.com/topic/libraries/view-binding)
-You can access a state using `StatefulLayout::get(id: Int)` (`showState` also returns the displayed state)
-To get a state view, use it's `contentView` attribute.
+A state can be obtained using `StatefulLayout::get(id: Int)` (`showState` also returns the displayed state)
+To get a state view, use its `contentView` attribute.
 
 ``` kotlin
 // ...
@@ -119,7 +121,7 @@ errorBinding.stateErrorRetryButton.setOnClickListener {
 
 #### Theme:
  The library adds a theme attribute `statefulLayoutStyle` which take a `StatefulLayout` theme.
- You can extend `Widget.Stateful.StatefulLayout` and change the following attributes:  
+ Extend `Widget.Stateful.StatefulLayout` and change the following attributes:  
  
 `StatefulLayout`:
 | Attribute  | Definition |
@@ -139,7 +141,7 @@ errorBinding.stateErrorRetryButton.setOnClickListener {
 
 #### Animation
 
-By default, no animation are played on state transition. You can add your own enter and exit
+By default, no animation are played on state transition. To add your own enter and exit
 animation:
 - On a `StatefulLayout` using `defaultEnterTransition` and `defaultExitTransition`. Those transitions
 will be played on every state change excluding state with their own transitions.
