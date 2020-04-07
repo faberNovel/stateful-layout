@@ -4,7 +4,6 @@
         <attr name="loadingStateLayout" format="reference"/>
         <attr name="errorStateLayout" format="reference"/>
         <attr name="initialState" format="reference"/>
-        <attr name="stateTransition" format="reference"/>
         <attr name="defaultEnterTransition" format="reference"/>
         <attr name="defaultExitrTransition" format="reference"/>
     </declare-styleable>
