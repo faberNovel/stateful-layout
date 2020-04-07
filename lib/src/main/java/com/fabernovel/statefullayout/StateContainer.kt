@@ -1,4 +1,4 @@
-package com.stateful.statefullayout
+package com.fabernovel.statefullayout
 
 interface StateContainer<IdT, StateT> {
     val currentStateId: IdT

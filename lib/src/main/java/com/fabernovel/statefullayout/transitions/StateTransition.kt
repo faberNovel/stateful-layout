@@ -1,6 +1,6 @@
-package com.stateful.statefullayout.transitions
+package com.fabernovel.statefullayout.transitions
 
-import com.stateful.statefullayout.State
+import com.fabernovel.statefullayout.State
 
 /**
  * Interface to play animation when [State] are shown and hidden.

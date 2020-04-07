@@ -1,4 +1,4 @@
-package com.stateful.statefullayout
+package com.fabernovel.statefullayout
 
 import android.view.LayoutInflater
 import android.view.View

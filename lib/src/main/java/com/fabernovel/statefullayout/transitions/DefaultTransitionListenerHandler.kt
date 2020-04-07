@@ -1,4 +1,4 @@
-package com.stateful.statefullayout.transitions
+package com.fabernovel.statefullayout.transitions
 
 class DefaultTransitionListenerHandler : TransitionListenerHandler {
     private val listeners: MutableList<StateTransitionListener> = mutableListOf()

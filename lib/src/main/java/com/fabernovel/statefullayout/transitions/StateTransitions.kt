@@ -1,12 +1,12 @@
-package com.stateful.statefullayout.transitions
+package com.fabernovel.statefullayout.transitions
 
 import android.animation.Animator
 import android.content.Context
 import android.view.animation.Animation
 import androidx.annotation.AnyRes
-import com.stateful.statefullayout.transitions.StateTransitions.fromAnimation
-import com.stateful.statefullayout.transitions.StateTransitions.fromAnimator
-import com.stateful.statefullayout.transitions.StateTransitions.fromResource
+import com.fabernovel.statefullayout.transitions.StateTransitions.fromAnimation
+import com.fabernovel.statefullayout.transitions.StateTransitions.fromAnimator
+import com.fabernovel.statefullayout.transitions.StateTransitions.fromResource
 
 /**
  * Helper object to create state transitions

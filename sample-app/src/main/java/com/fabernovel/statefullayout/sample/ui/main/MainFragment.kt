@@ -1,4 +1,4 @@
-package com.stateful.sample_app.ui.main
+package com.fabernovel.statefullayout.sample.ui.main
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
@@ -9,12 +9,12 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.animation.addListener
 import androidx.fragment.app.Fragment
-import com.stateful.sample_app.databinding.MainFragmentBinding
-import com.stateful.statefullayout.showContent
-import com.stateful.statefullayout.showError
-import com.stateful.statefullayout.showLoading
-import com.stateful.statefullayout.transitions.StateTransition
-import com.stateful.statefullayout.transitions.StateTransitions
+import com.fabernovel.statefullayout.sample.databinding.MainFragmentBinding
+import com.fabernovel.statefullayout.showContent
+import com.fabernovel.statefullayout.showError
+import com.fabernovel.statefullayout.showLoading
+import com.fabernovel.statefullayout.transitions.StateTransition
+import com.fabernovel.statefullayout.transitions.StateTransitions
 
 class MainFragment : Fragment() {
 

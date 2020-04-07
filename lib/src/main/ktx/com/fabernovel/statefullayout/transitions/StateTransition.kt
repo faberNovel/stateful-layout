@@ -1,4 +1,4 @@
-package com.stateful.statefullayout.transitions
+package com.fabernovel.statefullayout.transitions
 
 inline fun StateTransition.addListenerAndRemoveOnEnd(
     listener: StateTransitionListener

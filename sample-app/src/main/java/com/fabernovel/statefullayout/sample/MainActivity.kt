@@ -1,8 +1,8 @@
-package com.stateful.sample_app
+package com.fabernovel.statefullayout.sample
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.stateful.sample_app.ui.main.MainFragment
+import com.fabernovel.statefullayout.sample.ui.main.MainFragment
 
 class MainActivity : AppCompatActivity() {
 

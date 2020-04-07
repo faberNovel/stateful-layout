@@ -1,4 +1,4 @@
-package com.stateful.statefullayout.transitions
+package com.fabernovel.statefullayout.transitions
 
 interface TransitionListenerHandler {
     fun addListener(stateTransitionListener: StateTransitionListener)

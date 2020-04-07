@@ -1,6 +1,6 @@
-package com.stateful.statefullayout.transitions
+package com.fabernovel.statefullayout.transitions
 
-import com.stateful.statefullayout.State
+import com.fabernovel.statefullayout.State
 
 internal typealias StateTransitionCallback = (StateTransition, StateTransitionListener) -> Unit
 

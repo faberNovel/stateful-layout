@@ -1,12 +1,12 @@
-package com.stateful.statefullayout
+package com.fabernovel.statefullayout
 
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import android.widget.FrameLayout
-import com.stateful.statefullayout.transitions.DefaultStateTransitionListener
-import com.stateful.statefullayout.transitions.StateTransition
-import com.stateful.statefullayout.transitions.StateTransitions
+import com.fabernovel.statefullayout.transitions.DefaultStateTransitionListener
+import com.fabernovel.statefullayout.transitions.StateTransition
+import com.fabernovel.statefullayout.transitions.StateTransitions
 
 class State : FrameLayout {
     private var currentTransition: StateTransition? = null
