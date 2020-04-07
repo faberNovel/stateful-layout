@@ -26,9 +26,17 @@ fun StatefulLayout.getStateView(@IdRes key: Int): View {
     return this[key].contentView
 }
 
-fun StatefulLayout.showError(onRetryListener: (View) -> Unit = {}): State {
+fun StatefulLayout.showError(onRetryListener: ((View) -> Unit)? = null): State {
     val errorState = showState(R.id.stateError)
-    errorState.findViewById<Button>(R.id.stateErrorRetryButton).setOnClickListener(onRetryListener)
+    if (onRetryListener != null) {
+        val retryButton = errorState.findViewById<Button>(R.id.stateErrorRetryButton)
+        requireNotNull(retryButton) {
+            "The layout associated to the state 'stateError' must contain a Button with the id " +
+            "'stateErrorRetryButton'"
+        }
+
+        retryButton.setOnClickListener(onRetryListener)
+    }
     return errorState
 }
 
