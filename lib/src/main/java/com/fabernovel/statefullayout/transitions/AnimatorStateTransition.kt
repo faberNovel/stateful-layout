@@ -1,10 +1,10 @@
-package com.stateful.statefullayout.transitions
+package com.fabernovel.statefullayout.transitions
 
 import android.animation.Animator
 import android.animation.AnimatorInflater
 import android.content.Context
 import androidx.annotation.AnimatorRes
-import com.stateful.statefullayout.State
+import com.fabernovel.statefullayout.State
 
 internal class AnimatorStateTransition(
     private val animator: Animator,

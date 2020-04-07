@@ -1,4 +1,4 @@
-package com.stateful.statefullayout
+package com.fabernovel.statefullayout
 
 import android.content.Context
 import android.content.res.TypedArray
@@ -12,8 +12,8 @@ import androidx.annotation.AttrRes
 import androidx.annotation.IdRes
 import androidx.annotation.StyleRes
 import androidx.core.view.isVisible
-import com.stateful.statefullayout.transitions.StateTransition
-import com.stateful.statefullayout.transitions.StateTransitions
+import com.fabernovel.statefullayout.transitions.StateTransition
+import com.fabernovel.statefullayout.transitions.StateTransitions
 
 class StatefulLayout : FrameLayout, StateContainer<Int, State> {
     @IdRes private var initialStateId: Int = R.id.stateContent
