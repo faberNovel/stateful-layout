@@ -2,15 +2,17 @@ package com.fabernovel.statefullayout
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
+import androidx.annotation.LayoutRes
 import com.fabernovel.statefullayout.transitions.DefaultStateTransitionListener
 import com.fabernovel.statefullayout.transitions.StateTransition
 import com.fabernovel.statefullayout.transitions.StateTransitions
 
 class State : FrameLayout {
     private var currentTransition: StateTransition? = null
-    lateinit var contentView: View
+    var contentView: View? = null
         private set
 
     var enterTransition: StateTransition? = null
@@ -57,17 +59,21 @@ class State : FrameLayout {
     }
 
     fun setContentView(view: View) {
-        removeAllViews()
+        removeView(contentView)
         addView(view)
     }
 
-    override fun addView(child: View?) {
-        removeAllViews()
-        super.addView(child)
+    fun setContentView(@LayoutRes layoutRes: Int) {
+        removeView(contentView)
+        val layoutInflater = LayoutInflater.from(context)
+        addView(layoutInflater.inflate(layoutRes, this, false))
     }
 
     override fun onViewAdded(child: View?) {
         super.onViewAdded(child)
+        if (childCount > 1) {
+            throw IllegalArgumentException("State can only contain one child. (found: $childCount)")
+        }
         if (child != null) {
             contentView = child
         }

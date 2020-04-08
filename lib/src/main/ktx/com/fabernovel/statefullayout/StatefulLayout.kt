@@ -1,10 +1,9 @@
 package com.fabernovel.statefullayout
 
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Button
 import androidx.annotation.IdRes
+import androidx.annotation.LayoutRes
 
 fun StatefulLayout.addStateView(@IdRes key: Int, view: View) {
     val state = State(context)
@@ -15,15 +14,21 @@ fun StatefulLayout.addStateView(@IdRes key: Int, view: View) {
     addView(state, 0)
 }
 
-fun StatefulLayout.inflateStateView(
-    @IdRes key: Int,
-    inflate: (inflater: LayoutInflater, parent: ViewGroup) -> View
-) {
-    addStateView(key, inflate(LayoutInflater.from(context), this))
+fun StatefulLayout.addStateView(@IdRes key: Int, @LayoutRes layoutRes: Int) {
+    val state = State(context)
+    state.id = key
+    state.visibility = View.GONE
+    state.setContentView(layoutRes)
+
+    addView(state, 0)
 }
 
-fun StatefulLayout.getStateView(@IdRes key: Int): View {
+fun StatefulLayout.getStateView(@IdRes key: Int): View? {
     return this[key].contentView
+}
+
+fun StatefulLayout.requireStateView(@IdRes key: Int): View {
+    return this[key].requireContentView()
 }
 
 fun StatefulLayout.showError(onRetryListener: ((View) -> Unit)? = null): State {
