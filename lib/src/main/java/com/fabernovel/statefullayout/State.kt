@@ -6,16 +6,31 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
 import androidx.annotation.LayoutRes
-import com.fabernovel.statefullayout.transitions.DefaultStateTransitionListener
 import com.fabernovel.statefullayout.transitions.StateTransition
+import com.fabernovel.statefullayout.transitions.StateTransitionListener
 import com.fabernovel.statefullayout.transitions.StateTransitions
 
+/**
+ * A state displayed by a [StatefulLayout]
+ */
 class State : FrameLayout {
     private var currentTransition: StateTransition? = null
+    /**
+     * State content view to display
+     * Can be null.
+     */
     var contentView: View? = null
         private set
 
+    /**
+     * [StateTransition] played when the state is displayed.
+     * Override [StatefulLayout.defaultEnterTransition]
+     */
     var enterTransition: StateTransition? = null
+    /**
+     * [StateTransition] played when the state is hidden.
+     * Override [StatefulLayout.defaultExitTransition]
+     */
     var exitTransition: StateTransition? = null
 
     constructor(context: Context) : this(context, null)
@@ -64,14 +79,26 @@ class State : FrameLayout {
         }
     }
 
-    fun setContentView(@LayoutRes layoutRes: Int) {
-        val layoutInflater = LayoutInflater.from(context)
-        setContentView(layoutInflater.inflate(layoutRes, this, false))
-    }
-
+    /**
+     * Set the state's [contentView].
+     * Previous [contentView] is removed.
+     *
+     * @param view
+     */
     fun setContentView(view: View) {
         removeView(contentView)
         addView(view)
+    }
+
+    /**
+     * Set the state [contentView] by inflating a layout.
+     * @see [setContentView]
+     *
+     * @param layoutRes layout resource to inflate
+     */
+    fun setContentView(@LayoutRes layoutRes: Int) {
+        val layoutInflater = LayoutInflater.from(context)
+        setContentView(layoutInflater.inflate(layoutRes, this, false))
     }
 
     override fun onViewAdded(child: View?) {
@@ -91,7 +118,7 @@ class State : FrameLayout {
             visibility = View.VISIBLE
         } else {
             currentTransition = transition
-            transition.start(this, object : DefaultStateTransitionListener {
+            transition.start(this, object : StateTransitionListener {
                 override fun onTransitionStart(transition: StateTransition) {
                     visibility = View.VISIBLE
                 }
@@ -106,7 +133,7 @@ class State : FrameLayout {
             visibility = View.GONE
         } else {
             currentTransition = transition
-            transition.start(this, object : DefaultStateTransitionListener {
+            transition.start(this, object : StateTransitionListener {
                 override fun onTransitionEnd(transition: StateTransition) {
                     visibility = View.GONE
                 }
