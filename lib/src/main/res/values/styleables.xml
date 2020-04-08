@@ -11,5 +11,6 @@
     <declare-styleable name="State">
         <attr name="enterTransition" format="reference"/>
         <attr name="exitTransition" format="reference"/>
+        <attr name="contentLayout" format="reference"/>
     </declare-styleable>
 </resources>
