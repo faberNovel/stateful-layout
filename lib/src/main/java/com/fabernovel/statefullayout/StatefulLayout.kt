@@ -66,8 +66,8 @@ class StatefulLayout : FrameLayout, StateContainer<Int, State> {
         )
         try {
             val inflater = LayoutInflater.from(context)
-            inflateLoadingState(array, inflater)
-            inflateErrorState(array, inflater)
+            inflateLoadingState(array)
+            inflateErrorState(array)
 
             loadDefaultAnimations(array)
 
@@ -97,26 +97,20 @@ class StatefulLayout : FrameLayout, StateContainer<Int, State> {
         }
     }
 
-    private fun inflateLoadingState(
-        array: TypedArray,
-        inflater: LayoutInflater
-    ) {
+    private fun inflateLoadingState(array: TypedArray) {
         val loadingLayout = array.getResourceId(
             R.styleable.StatefulLayout_loadingStateLayout,
             R.layout.state_loading
         )
-        addStateView(R.id.stateLoading, inflater.inflate(loadingLayout, this, false))
+        addStateView(R.id.stateLoading, loadingLayout)
     }
 
-    private fun inflateErrorState(
-        array: TypedArray,
-        inflater: LayoutInflater
-    ) {
+    private fun inflateErrorState(array: TypedArray) {
         val errorLayout = array.getResourceId(
             R.styleable.StatefulLayout_errorStateLayout,
             R.layout.state_error
         )
-        addStateView(R.id.stateError, inflater.inflate(errorLayout, this, false))
+        addStateView(R.id.stateError, errorLayout)
     }
 
     override fun onViewAdded(child: View?) {
