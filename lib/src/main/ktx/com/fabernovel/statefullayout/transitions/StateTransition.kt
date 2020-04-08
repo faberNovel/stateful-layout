@@ -1,5 +1,11 @@
 package com.fabernovel.statefullayout.transitions
 
+/**
+ * Add a [StateTransitionListener] on a [StateTransition] and remove it on transition end.
+ *
+ * @param listener
+ * @return
+ */
 inline fun StateTransition.addListenerAndRemoveOnEnd(
     listener: StateTransitionListener
 ): StateTransitionListener {
@@ -25,18 +31,47 @@ inline fun StateTransition.addListenerAndRemoveOnEnd(
     return stateTransitionListener
 }
 
+/**
+ * Add do [action] on [StateTransition]'s end
+ *
+ * @param action action to do
+ */
 inline fun StateTransition.doOnEnd(crossinline action: (transition: StateTransition) -> Unit) =
     setListener(onEnd = action)
 
+/**
+ * Add do [action] on [StateTransition]'s start
+ *
+ * @param action action to do
+ */
 inline fun StateTransition.doOnStart(crossinline action: (transition: StateTransition) -> Unit) =
     setListener(onStart = action)
 
+/**
+ * Add do [action] on [StateTransition]'s cancel
+ *
+ * @param action action to do
+ */
 inline fun StateTransition.doOnCancel(crossinline action: (transition: StateTransition) -> Unit) =
     setListener(onCancel = action)
 
+/**
+ * Add do [action] on [StateTransition]'s repeat
+ *
+ * @param action action to do
+ */
 inline fun StateTransition.doOnRepeat(crossinline action: (transition: StateTransition) -> Unit) =
     setListener(onRepeat = action)
 
+/**
+ * Convenient method to set a [StateTransitionListener]
+ *
+ * @param onEnd action on end
+ * @param onStart action on start
+ * @param onCancel action on cancel
+ * @param onRepeat action on repeat
+ * @return the set [StateTransitionListener]
+ */
 inline fun StateTransition.setListener(
     crossinline onEnd: (transition: StateTransition) -> Unit = {},
     crossinline onStart: (transition: StateTransition) -> Unit = {},

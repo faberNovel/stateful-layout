@@ -1,6 +1,6 @@
 package com.fabernovel.statefullayout.transitions
 
-class DefaultTransitionListenerHandler : TransitionListenerHandler {
+internal class DefaultTransitionListenerHandler : TransitionListenerHandler {
     private val listeners: MutableList<StateTransitionListener> = mutableListOf()
 
     override fun addListener(stateTransitionListener: StateTransitionListener) {
