@@ -20,5 +20,6 @@
     <public type="attr" name="stateStyle" />
     <public type="attr" name="enterAnim"/>
     <public type="attr" name="exitAnim"/>
+    <public type="attr" name="contentLayout"/>
 
 </resources>

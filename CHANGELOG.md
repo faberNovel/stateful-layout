@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - State content view can be set using a layout resource.
+- The new contentLayout State's attribute allows to specify a layout to inflate.  
 ### Changed
 - State now throws an IllegalArgumentException if multiples views are added using addView.
 

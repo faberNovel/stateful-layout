@@ -53,6 +53,12 @@ class State : FrameLayout {
             if (exitAnimRes != 0) {
                 exitTransition = StateTransitions.fromResource(context, exitAnimRes)
             }
+
+            @LayoutRes
+            val contentLayout = array.getResourceId(R.styleable.State_contentLayout, 0)
+            if (contentLayout != 0) {
+                setContentView(contentLayout)
+            }
         } finally {
             array.recycle()
         }
