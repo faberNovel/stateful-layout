@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.animation.addListener
 import androidx.fragment.app.Fragment
-import com.fabernovel.statefullayout.requireContentView
+import com.fabernovel.statefullayout.requireStateView
 import com.fabernovel.statefullayout.sample.R
 import com.fabernovel.statefullayout.sample.databinding.MainFragmentBinding
 import com.fabernovel.statefullayout.sample.databinding.StateCustomBinding
@@ -61,7 +61,7 @@ class MainFragment : Fragment() {
             }
 
             // Binding a custom state view
-            val customStateView = statefulLayout[R.id.stateCustom].requireContentView()
+            val customStateView = statefulLayout.requireStateView(R.id.stateCustom)
             val customBinding = StateCustomBinding.bind(customStateView)
             customBinding.customActionButton.setOnClickListener {
                 Toast.makeText(requireContext(), "Doing stuff", Toast.LENGTH_SHORT).show()
