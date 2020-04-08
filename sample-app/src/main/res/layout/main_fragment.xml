@@ -16,10 +16,11 @@
         app:layout_constraintBottom_toTopOf="@id/actions"
         app:layout_constraintTop_toTopOf="parent"
         >
+
         <com.fabernovel.statefullayout.State
+            android:id="@+id/stateLoading"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/stateLoading"
             android:background="@color/colorPrimary"
             />
 
@@ -62,6 +63,12 @@
                     />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.fabernovel.statefullayout.State>
+        <com.fabernovel.statefullayout.State
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/stateCustom"
+            app:contentLayout="@layout/state_custom"
+            />
     </com.fabernovel.statefullayout.StatefulLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -80,6 +87,7 @@
             android:layout_height="wrap_content"
             android:text="Show error"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/contentButton"
             app:layout_constraintEnd_toStartOf="@+id/loadingButton"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -91,8 +99,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Show loading"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/contentButton"
+            app:layout_constraintBottom_toTopOf="@id/customButton"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/errorButton"
             app:layout_constraintTop_toTopOf="parent"
@@ -102,12 +110,26 @@
             android:id="@+id/contentButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:text="Show content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/customButton"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/errorButton"
+            />
+
+        <Button
+            android:id="@+id/customButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Show Custom"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/loadingButton"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/contentButton"
+            app:layout_constraintTop_toBottomOf="@id/loadingButton"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
