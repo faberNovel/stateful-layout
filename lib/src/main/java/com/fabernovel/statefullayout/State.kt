@@ -58,15 +58,14 @@ class State : FrameLayout {
         }
     }
 
+    fun setContentView(@LayoutRes layoutRes: Int) {
+        val layoutInflater = LayoutInflater.from(context)
+        setContentView(layoutInflater.inflate(layoutRes, this, false))
+    }
+
     fun setContentView(view: View) {
         removeView(contentView)
         addView(view)
-    }
-
-    fun setContentView(@LayoutRes layoutRes: Int) {
-        removeView(contentView)
-        val layoutInflater = LayoutInflater.from(context)
-        addView(layoutInflater.inflate(layoutRes, this, false))
     }
 
     override fun onViewAdded(child: View?) {
