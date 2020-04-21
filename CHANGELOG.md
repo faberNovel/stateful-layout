@@ -16,6 +16,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - DefaultStateTransitionListener was removed in favor of Kotlin interface default implementation in
 StateTransitionListener
 
+### Fixed
+- Remove launcher icons, they are leaking to project, replacing the project app icons
+
 ## [1.0-RC02]
 ### Fixed
 - Fix NPE when showing an error state that doesn't contain a retry button in its layout
