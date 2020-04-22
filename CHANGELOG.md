@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [Unreleased]
+### Added
+- State content view can be set using a layout resource.
+- The new contentLayout State's attribute allows to specify a layout to inflate.
+- Documentation on public classes.  
+### Changed
+- State now throws an IllegalArgumentException if multiples views are added using addView.
+- DefaultTransitionListenerHandler was marked as internal
+- All method in StateTransitionListener interface now have empty default implementation.
+### Removed
+- DefaultStateTransitionListener was removed in favor of Kotlin interface default implementation in
+StateTransitionListener
+
+### Fixed
+- Remove launcher icons, they are leaking to project, replacing the project app icons
 
 ## [1.0-RC02]
 ### Fixed

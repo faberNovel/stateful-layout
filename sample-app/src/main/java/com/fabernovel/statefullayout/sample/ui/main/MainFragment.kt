@@ -9,7 +9,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.animation.addListener
 import androidx.fragment.app.Fragment
+import com.fabernovel.statefullayout.requireStateView
+import com.fabernovel.statefullayout.sample.R
 import com.fabernovel.statefullayout.sample.databinding.MainFragmentBinding
+import com.fabernovel.statefullayout.sample.databinding.StateCustomBinding
 import com.fabernovel.statefullayout.showContent
 import com.fabernovel.statefullayout.showError
 import com.fabernovel.statefullayout.showLoading
@@ -52,6 +55,16 @@ class MainFragment : Fragment() {
             }
             loadingButton.setOnClickListener {
                 statefulLayout.showLoading()
+            }
+            customButton.setOnClickListener {
+                statefulLayout.showState(R.id.stateCustom)
+            }
+
+            // Binding a custom state view
+            val customStateView = statefulLayout.requireStateView(R.id.stateCustom)
+            val customBinding = StateCustomBinding.bind(customStateView)
+            customBinding.customActionButton.setOnClickListener {
+                Toast.makeText(requireContext(), "Doing stuff", Toast.LENGTH_SHORT).show()
             }
         }
     }

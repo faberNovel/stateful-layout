@@ -19,6 +19,14 @@ object StateTransitions {
     private const val ANIMATOR_RES = "animator"
     private const val ANIMATION_RES = "anim"
 
+    /**
+     * Create a [StateTransition] using a [androidx.annotation.AnimRes] or
+     * [androidx.annotation.AnimatorRes] resource
+     *
+     * @param context context used for inflation
+     * @param res a [androidx.annotation.AnimRes] or [androidx.annotation.AnimatorRes] resource
+     * @return a [StateTransition]
+     */
     fun fromResource(context: Context, @AnyRes res: Int): StateTransition {
         val resources = context.resources
         return when (val typeName = resources.getResourceTypeName(res)) {
@@ -30,10 +38,48 @@ object StateTransitions {
         }
     }
 
+    /**
+     * Create a [StateTransition] using an [Animator]
+     *
+     * @param animator a [Animator]
+     * @return a [StateTransition]
+     */
     fun fromAnimator(animator: Animator): StateTransition = AnimatorStateTransition(animator)
 
+    /**
+     * Create a [StateTransition] using an [Animation]
+     *
+     * @param animation a [Animation]
+     * @return a [StateTransition]
+     */
     fun fromAnimation(animation: Animation): StateTransition = AnimationStateTransition(animation)
 
+    /**
+     * Create a [StateTransition] using a callback
+     *
+     * @param onStart `(StateTransition, StateTransitionListener) -> Unit` called on [StateTransition.start]
+     * You *must* call [StateTransitionListener.onTransitionStart] and [StateTransitionListener.onTransitionEnd]
+     * @param onCancel action to do on [StateTransition.cancel]
+     * @return a [StateTransition]
+     *
+     * Usage:
+     * ``` kotlin
+     * val animator = AnimatorSet()
+     * // add animators to the animator set
+     * return StateTransitions.fromCallback(
+     *      onStart = { transition, listener ->
+     *          animator.addListener(
+     *             // notify state transition about transition start
+     *             onStart = { listener.onTransitionStart(transition) },
+     *             // notify state transition about transition end
+     *            onEnd = { listener.onTransitionEnd(transition) }
+     *          )
+     *          animator.start()
+     *          },
+     *      onCancel = animator::cancel
+     *   )
+     * ```
+     */
     fun fromCallback(
         onStart: StateTransitionCallback,
         onCancel: () -> Unit

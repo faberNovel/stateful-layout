@@ -95,6 +95,9 @@ To add a custom state, add a `State` inside a `StatefulLayout`.
 
 `State` can also be added programmatically to a `StatefulLayout` (they still need to have an id).
 
+You can access a state content view using `contentView` or `requireContentView` which check 
+if view is null. 
+
 #### Change the displayed state:
 To change the displayed state, call `showState(@IdRes id: Int)` with your state's id. 
 Default state also have their kotlin extensions for convenience:
@@ -106,12 +109,11 @@ Default state also have their kotlin extensions for convenience:
 If the state is in a layout, it can be accessed like any other view. 
 To access views from layout that are inflated by the `StatefulLayout`, the recommended way is to
 use Android View Binding. (https://developer.android.com/topic/libraries/view-binding)
-A state can be obtained using `StatefulLayout::get(id: Int)` (`showState` also returns the displayed state)
-To get a state view, use its `contentView` attribute.
+To get a stateView you can use `requireStateView(<stateId>)` extension. 
 
 ``` kotlin
 // ...
-val errorStateView = binding.statefulLayout[R.id.stateError].contentView       
+val errorStateView = binding.requireStateView(R.id.stateError)       
 val errorBinding = StateErrorBinding.bind(errorStateView)
 
 errorBinding.stateErrorRetryButton.setOnClickListener { 
@@ -120,7 +122,7 @@ errorBinding.stateErrorRetryButton.setOnClickListener {
 ```     
 
 #### Theme:
- The library adds a theme attribute `statefulLayoutStyle` which take a `StatefulLayout` theme.
+ The library adds a theme attribute `statefulLayoutStyle` which take a `StatefulLayout` style.
  Extend `Widget.Stateful.StatefulLayout` and change the following attributes:  
  
 `StatefulLayout`:
@@ -128,7 +130,6 @@ errorBinding.stateErrorRetryButton.setOnClickListener {
 | ------------- | ------------- |
 | loadingStateLayout  | A layout reference used to inflate the loading state view. (optional)  |
 | errorStateLayout  | A layout reference used to inflate the error state view. (optional)  |
-| initialState  | Id of the initially displayed state. (by default: `stateContent`)  |
 | initialState  | Id of the initially displayed state. (by default: `stateContent`)  |
 | defaultEnterTransition  | Default enter transition. (by default: none)  |
 | defaultExitTransition  | Default exit transition. (by default: none)  |

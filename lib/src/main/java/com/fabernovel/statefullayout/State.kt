@@ -2,18 +2,35 @@ package com.fabernovel.statefullayout
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
-import com.fabernovel.statefullayout.transitions.DefaultStateTransitionListener
+import androidx.annotation.LayoutRes
 import com.fabernovel.statefullayout.transitions.StateTransition
+import com.fabernovel.statefullayout.transitions.StateTransitionListener
 import com.fabernovel.statefullayout.transitions.StateTransitions
 
+/**
+ * A state displayed by a [StatefulLayout]
+ */
 class State : FrameLayout {
     private var currentTransition: StateTransition? = null
-    lateinit var contentView: View
+    /**
+     * State content view to display
+     * Can be null.
+     */
+    var contentView: View? = null
         private set
 
+    /**
+     * [StateTransition] played when the state is displayed.
+     * Override [StatefulLayout.defaultEnterTransition]
+     */
     var enterTransition: StateTransition? = null
+    /**
+     * [StateTransition] played when the state is hidden.
+     * Override [StatefulLayout.defaultExitTransition]
+     */
     var exitTransition: StateTransition? = null
 
     constructor(context: Context) : this(context, null)
@@ -51,23 +68,44 @@ class State : FrameLayout {
             if (exitAnimRes != 0) {
                 exitTransition = StateTransitions.fromResource(context, exitAnimRes)
             }
+
+            @LayoutRes
+            val contentLayout = array.getResourceId(R.styleable.State_contentLayout, 0)
+            if (contentLayout != 0) {
+                setContentView(contentLayout)
+            }
         } finally {
             array.recycle()
         }
     }
 
+    /**
+     * Set the state's [contentView].
+     * Previous [contentView] is removed.
+     *
+     * @param view
+     */
     fun setContentView(view: View) {
-        removeAllViews()
+        removeView(contentView)
         addView(view)
     }
 
-    override fun addView(child: View?) {
-        removeAllViews()
-        super.addView(child)
+    /**
+     * Set the state [contentView] by inflating a layout.
+     * @see [setContentView]
+     *
+     * @param layoutRes layout resource to inflate
+     */
+    fun setContentView(@LayoutRes layoutRes: Int) {
+        val layoutInflater = LayoutInflater.from(context)
+        setContentView(layoutInflater.inflate(layoutRes, this, false))
     }
 
     override fun onViewAdded(child: View?) {
         super.onViewAdded(child)
+        if (childCount > 1) {
+            throw IllegalArgumentException("State can only contain one child. (found: $childCount)")
+        }
         if (child != null) {
             contentView = child
         }
@@ -80,7 +118,7 @@ class State : FrameLayout {
             visibility = View.VISIBLE
         } else {
             currentTransition = transition
-            transition.start(this, object : DefaultStateTransitionListener {
+            transition.start(this, object : StateTransitionListener {
                 override fun onTransitionStart(transition: StateTransition) {
                     visibility = View.VISIBLE
                 }
@@ -95,7 +133,7 @@ class State : FrameLayout {
             visibility = View.GONE
         } else {
             currentTransition = transition
-            transition.start(this, object : DefaultStateTransitionListener {
+            transition.start(this, object : StateTransitionListener {
                 override fun onTransitionEnd(transition: StateTransition) {
                     visibility = View.GONE
                 }

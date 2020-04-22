@@ -5,7 +5,6 @@ import android.content.res.TypedArray
 import android.os.Parcel
 import android.os.Parcelable
 import android.util.AttributeSet
-import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
 import androidx.annotation.AttrRes
@@ -15,6 +14,9 @@ import androidx.core.view.isVisible
 import com.fabernovel.statefullayout.transitions.StateTransition
 import com.fabernovel.statefullayout.transitions.StateTransitions
 
+/**
+ * A layout containing states ([State]). Only one state is displayed at a time.
+ */
 class StatefulLayout : FrameLayout, StateContainer<Int, State> {
     @IdRes private var initialStateId: Int = R.id.stateContent
 
@@ -24,7 +26,13 @@ class StatefulLayout : FrameLayout, StateContainer<Int, State> {
     override val currentStateId: Int
         get() = _currentStateId
 
+    /**
+     *  [StateTransition] played when any state is displayed
+     */
     var defaultEnterTransition: StateTransition? = null
+    /**
+     * [StateTransition] played when any state is hidden
+     */
     var defaultExitTransition: StateTransition? = null
 
     constructor(context: Context) : this(context, null)
@@ -65,9 +73,8 @@ class StatefulLayout : FrameLayout, StateContainer<Int, State> {
             defStyleRes
         )
         try {
-            val inflater = LayoutInflater.from(context)
-            inflateLoadingState(array, inflater)
-            inflateErrorState(array, inflater)
+            inflateLoadingState(array)
+            inflateErrorState(array)
 
             loadDefaultAnimations(array)
 
@@ -97,26 +104,20 @@ class StatefulLayout : FrameLayout, StateContainer<Int, State> {
         }
     }
 
-    private fun inflateLoadingState(
-        array: TypedArray,
-        inflater: LayoutInflater
-    ) {
+    private fun inflateLoadingState(array: TypedArray) {
         val loadingLayout = array.getResourceId(
             R.styleable.StatefulLayout_loadingStateLayout,
             R.layout.state_loading
         )
-        addStateView(R.id.stateLoading, inflater.inflate(loadingLayout, this, false))
+        addStateView(R.id.stateLoading, loadingLayout)
     }
 
-    private fun inflateErrorState(
-        array: TypedArray,
-        inflater: LayoutInflater
-    ) {
+    private fun inflateErrorState(array: TypedArray) {
         val errorLayout = array.getResourceId(
             R.styleable.StatefulLayout_errorStateLayout,
             R.layout.state_error
         )
-        addStateView(R.id.stateError, inflater.inflate(errorLayout, this, false))
+        addStateView(R.id.stateError, errorLayout)
     }
 
     override fun onViewAdded(child: View?) {
@@ -156,6 +157,13 @@ class StatefulLayout : FrameLayout, StateContainer<Int, State> {
         }
     }
 
+    /**
+     * Show a state
+     *
+     * @param id state's id
+     * @return shown state
+     * @throws [NoSuchElementException] if [id] was not found.
+     */
     override fun showState(@IdRes id: Int): State {
         val currentState = get(currentStateId)
         if (id == currentStateId) {
@@ -171,11 +179,25 @@ class StatefulLayout : FrameLayout, StateContainer<Int, State> {
         return nextState
     }
 
+    /**
+     * Add a state to the stateful layout
+     * If the id already exists, the previous state is override.
+     *
+     * @param id state id
+     * @param state state to add
+     */
     override fun addState(@IdRes id: Int, state: State) {
         state.id = id
         addView(state, 0)
     }
 
+    /**
+     * Get a state by it's id
+     *
+     * @param id the id of the state to get
+     * @return a state
+     * @throws [NoSuchElementException] if the state was not found.
+     */
     override fun get(id: Int): State {
         return states[id]
             ?: throw NoSuchElementException("$id was not found in this StatefulLayout.")
