@@ -18,11 +18,11 @@ import com.fabernovel.statefullayout.transitions.StateTransitions
  * A layout containing states ([State]). Only one state is displayed at a time.
  */
 class StatefulLayout : FrameLayout, StateContainer<Int, State> {
-    @IdRes private var initialStateId: Int = R.id.stateContent
+    @IdRes private var initialStateId: Int = View.NO_ID
 
     private val states: MutableMap<Int, State> = mutableMapOf()
 
-    @IdRes private var _currentStateId: Int = -1
+    @IdRes private var _currentStateId: Int = View.NO_ID
     override val currentStateId: Int
         get() = _currentStateId
 
@@ -30,6 +30,7 @@ class StatefulLayout : FrameLayout, StateContainer<Int, State> {
      *  [StateTransition] played when any state is displayed
      */
     var defaultEnterTransition: StateTransition? = null
+
     /**
      * [StateTransition] played when any state is hidden
      */
@@ -80,7 +81,7 @@ class StatefulLayout : FrameLayout, StateContainer<Int, State> {
 
             initialStateId = array.getResourceId(
                 R.styleable.StatefulLayout_initialState,
-                R.id.stateContent
+                View.NO_ID
             )
         } finally {
             array.recycle()
@@ -136,9 +137,11 @@ class StatefulLayout : FrameLayout, StateContainer<Int, State> {
 
     override fun onFinishInflate() {
         super.onFinishInflate()
-        states[initialStateId]?.visibility = View.VISIBLE
+        if (states.containsKey(initialStateId)) {
+            states[initialStateId]?.visibility = View.VISIBLE
 
-        _currentStateId = initialStateId
+            _currentStateId = initialStateId
+        }
     }
 
     override fun onSaveInstanceState(): Parcelable? {
@@ -165,14 +168,16 @@ class StatefulLayout : FrameLayout, StateContainer<Int, State> {
      * @throws [NoSuchElementException] if [id] was not found.
      */
     override fun showState(@IdRes id: Int): State {
-        val currentState = get(currentStateId)
-        if (id == currentStateId) {
-            return currentState
+        if (currentStateId != View.NO_ID) {
+            val currentState = get(currentStateId)
+            if (id == currentStateId) {
+                return currentState
+            }
+            currentState.hide(defaultExitTransition)
         }
+
         val nextState = states[id]
             ?: throw NoSuchElementException("$id was not found in this StatefulLayout.")
-
-        currentState.hide(defaultExitTransition)
         nextState.show(defaultEnterTransition)
 
         _currentStateId = id
