@@ -10,16 +10,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The new contentLayout State's attribute allows to specify a layout to inflate.
 - Documentation on public classes.  
 ### Breaking change
-- Default initial state in no longer stateContent, by default no state is displayed.
+- Default initial state is no longer `stateContent`, by default no state is displayed.
 ### Changed
 - State now throws an IllegalArgumentException if multiples views are added using addView.
-- DefaultTransitionListenerHandler was marked as internal
+- Mark DefaultTransitionListenerHandler as internal
 - All method in StateTransitionListener interface now have empty default implementation.
 ### Removed
 - DefaultStateTransitionListener was removed in favor of Kotlin interface default implementation in
 StateTransitionListener
 ### Fixed
-- Remove launcher icons, they are leaking to project, replacing the project app icons
+- Remove launcher icons, they were leaking to project, replacing ones project launcher icons under certain circumstance.
 
 ## [1.0-RC02]
 ### Fixed
