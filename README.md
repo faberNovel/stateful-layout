@@ -130,7 +130,7 @@ errorBinding.stateErrorRetryButton.setOnClickListener {
 | ------------- | ------------- |
 | loadingStateLayout  | A layout reference used to inflate the loading state view. (optional)  |
 | errorStateLayout  | A layout reference used to inflate the error state view. (optional)  |
-| initialState  | Id of the initially displayed state. (by default: `stateContent`)  |
+| initialState  | Id of the initially displayed state. (by default: none)  |
 | defaultEnterTransition  | Default enter transition. (by default: none)  |
 | defaultExitTransition  | Default exit transition. (by default: none)  |
 
