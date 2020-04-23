@@ -93,6 +93,36 @@ To add a custom state, add a `State` inside a `StatefulLayout`.
 - State can only have *one* child view
 - State *must* have an id. 
 
+State's child can be set:
+1. In the layout by set a layout as `contentLayout` attribute.
+```xml
+<com.fabernovel.statefullayout.State
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/stateCustom"
+            app:contentLayout="@layout/state_custom"
+            />
+```
+2. In the layout, by adding a view as a child of the state
+```xml
+<com.fabernovel.statefullayout.State
+            android:id="@id/stateContent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:enterTransition="@anim/fragment_open_enter"
+            app:exitTransition="@anim/fragment_close_exit"
+            >
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/colorAccent"
+                >
+                <!--CONTENT-->
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.fabernovel.statefullayout.State>
+```
+
 `State` can also be added programmatically to a `StatefulLayout` (they still need to have an id).
 
 You can access a state content view using `contentView` or `requireContentView` which check 
