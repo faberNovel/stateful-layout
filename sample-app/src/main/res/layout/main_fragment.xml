@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:defaultEnterTransition="@anim/fragment_fade_enter"
-        app:defaultExitrTransition="@anim/fragment_fade_exit"
+        app:defaultExitTransition="@anim/fragment_fade_exit"
         app:initialState="@id/stateLoading"
         app:layout_constraintBottom_toTopOf="@id/actions"
         app:layout_constraintTop_toTopOf="parent"
