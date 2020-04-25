@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Fix enter/exit defaultTransition sharing the same animation instance for all the states. Switching
 quickly between states was resulting in animation issue.
+- Fix crash when restoring a StatefulLayout that has no state
 
 ## [1.0-RC03]
 ### Added

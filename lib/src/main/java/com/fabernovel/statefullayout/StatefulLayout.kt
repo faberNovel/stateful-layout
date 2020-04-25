@@ -166,7 +166,9 @@ class StatefulLayout : FrameLayout, StateContainer<Int, State> {
         super.onRestoreInstanceState(state?.superState)
 
         if (savedState != null) {
-            showState(savedState.currentStateId)
+            if (savedState.currentStateId != View.NO_ID) {
+                showState(savedState.currentStateId)
+            }
         }
     }
 
@@ -219,7 +221,7 @@ class StatefulLayout : FrameLayout, StateContainer<Int, State> {
     }
 
     private class SavedState : BaseSavedState {
-        var currentStateId: Int = -1
+        var currentStateId: Int = View.NO_ID
 
         constructor(superState: Parcelable?) : super(superState)
 
