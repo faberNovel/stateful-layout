@@ -12,6 +12,7 @@ import androidx.annotation.IdRes
 import androidx.annotation.StyleRes
 import androidx.core.view.isVisible
 import com.fabernovel.statefullayout.transitions.StateTransition
+import com.fabernovel.statefullayout.transitions.StateTransitionProvider
 import com.fabernovel.statefullayout.transitions.StateTransitions
 
 /**
@@ -29,12 +30,12 @@ class StatefulLayout : FrameLayout, StateContainer<Int, State> {
     /**
      *  [StateTransition] played when any state is displayed
      */
-    var defaultEnterTransition: StateTransition? = null
+    var defaultEnterTransition: StateTransitionProvider? = null
 
     /**
      * [StateTransition] played when any state is hidden
      */
-    var defaultExitTransition: StateTransition? = null
+    var defaultExitTransition: StateTransitionProvider? = null
 
     constructor(context: Context) : this(context, null)
 
@@ -94,14 +95,22 @@ class StatefulLayout : FrameLayout, StateContainer<Int, State> {
             0
         )
         if (defaultEnterAnimRes != 0) {
-            defaultEnterTransition = StateTransitions.fromResource(context, defaultEnterAnimRes)
+            defaultEnterTransition = createTransitionProviderOf(defaultEnterAnimRes)
         }
         val defaultExitAnimRes = array.getResourceId(
             R.styleable.StatefulLayout_defaultExitTransition,
             0
         )
         if (defaultExitAnimRes != 0) {
-            defaultExitTransition = StateTransitions.fromResource(context, defaultExitAnimRes)
+            defaultExitTransition = createTransitionProviderOf(defaultExitAnimRes)
+        }
+    }
+
+    private fun createTransitionProviderOf(animRes: Int): StateTransitionProvider {
+        return object : StateTransitionProvider {
+            override fun get(): StateTransition {
+                return StateTransitions.fromResource(context, animRes)
+            }
         }
     }
 
