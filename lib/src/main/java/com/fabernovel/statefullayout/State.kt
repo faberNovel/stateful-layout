@@ -8,6 +8,7 @@ import android.widget.FrameLayout
 import androidx.annotation.LayoutRes
 import com.fabernovel.statefullayout.transitions.StateTransition
 import com.fabernovel.statefullayout.transitions.StateTransitionListener
+import com.fabernovel.statefullayout.transitions.StateTransitionProvider
 import com.fabernovel.statefullayout.transitions.StateTransitions
 
 /**
@@ -111,9 +112,9 @@ class State : FrameLayout {
         }
     }
 
-    internal fun show(fallbackTransition: StateTransition? = null) {
+    internal fun show(fallbackTransitionProvider: StateTransitionProvider? = null) {
         currentTransition?.cancel()
-        val transition = enterTransition ?: fallbackTransition
+        val transition = enterTransition ?: fallbackTransitionProvider?.get()
         if (transition == null) {
             visibility = View.VISIBLE
         } else {
@@ -126,9 +127,9 @@ class State : FrameLayout {
         }
     }
 
-    internal fun hide(fallbackTransition: StateTransition? = null) {
+    internal fun hide(fallbackTransitionProvider: StateTransitionProvider? = null) {
         currentTransition?.cancel()
-        val transition = exitTransition ?: fallbackTransition
+        val transition = exitTransition ?: fallbackTransitionProvider?.get()
         if (transition == null) {
             visibility = View.GONE
         } else {
