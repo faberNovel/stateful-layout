@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Changed
 - Upgrade Android Gradle Plugin to 3.6.3
 - Upgrade Kotlin to 1.3.72
+## Added
+- Add units tests in the sample app
 
 ## [1.0-RC4] - 27/04/2020
 ### Changed
