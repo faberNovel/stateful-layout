@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Hide all states by default
+
 ### Breaking change
 - Fix typo on xml attribute `defaultExitrTransition` that has been renamed to `defaultExitTransition`
 ### Fixed
