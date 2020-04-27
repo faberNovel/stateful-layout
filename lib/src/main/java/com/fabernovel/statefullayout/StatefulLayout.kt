@@ -137,6 +137,7 @@ class StatefulLayout : FrameLayout, StateContainer<Int, State> {
 
     override fun onFinishInflate() {
         super.onFinishInflate()
+        states.values.onEach { it.visibility = View.GONE }
         if (initialStateId != View.NO_ID) {
             val initialState = get(initialStateId)
             initialState.visibility = View.VISIBLE
