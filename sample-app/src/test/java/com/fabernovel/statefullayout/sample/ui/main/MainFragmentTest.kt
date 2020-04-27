@@ -55,7 +55,6 @@ class MainFragmentTest {
             .check(matches(withEffectiveVisibility(VISIBLE)))
     }
 
-
     @Test
     fun `when pressing show content, content state should be displayed`() {
         onView(withId(R.id.contentButton)).perform(click())
