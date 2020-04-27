@@ -4,13 +4,13 @@
         <attr name="loadingStateLayout" format="reference"/>
         <attr name="errorStateLayout" format="reference"/>
         <attr name="initialState" format="reference"/>
-        <attr name="stateTransition" format="reference"/>
-        <attr name="defaultEnterAnimation" format="reference"/>
-        <attr name="defaultExitAnimation" format="reference"/>
+        <attr name="defaultEnterTransition" format="reference"/>
+        <attr name="defaultExitTransition" format="reference"/>
     </declare-styleable>
 
     <declare-styleable name="State">
-        <attr name="enterAnimation" format="reference"/>
-        <attr name="exitAnimation" format="reference"/>
+        <attr name="enterTransition" format="reference"/>
+        <attr name="exitTransition" format="reference"/>
+        <attr name="contentLayout" format="reference"/>
     </declare-styleable>
 </resources>
