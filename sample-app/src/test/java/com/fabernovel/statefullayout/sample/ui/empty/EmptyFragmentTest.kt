@@ -10,7 +10,7 @@ import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
 import androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import com.fabernovel.statefullayout.sample.R
-import com.fabernovel.statefullayout.utils.isStatefulLayoutState
+import com.fabernovel.statefullayout.utils.withStatefulLayoutStateId
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -40,9 +40,9 @@ class EmptyFragmentTest {
 
     @Test
     fun `given a stateful layout has no initial state, no state should be visible`() {
-        onView(isStatefulLayoutState(R.id.stateLoading))
+        onView(withStatefulLayoutStateId(R.id.stateLoading))
             .check(matches(withEffectiveVisibility(GONE)))
-        onView(isStatefulLayoutState(R.id.stateError))
+        onView(withStatefulLayoutStateId(R.id.stateError))
             .check(matches(withEffectiveVisibility(GONE)))
     }
 }
