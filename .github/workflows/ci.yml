@@ -6,7 +6,6 @@ on:
       - develop
       - master
       - 'release/**'
-      - 'release/**'
 
 jobs:
   build_and_check:
