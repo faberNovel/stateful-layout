@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Upgrade Kotlin to 1.3.72
 ## Added
 - Add units tests in the sample app
+- Contribution guide
+- Dangerfile (see [DangerJS](https://danger.systems/js/))
 
 ## [1.0-RC4] - 27/04/2020
 ### Changed
