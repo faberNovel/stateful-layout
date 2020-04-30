@@ -19,3 +19,17 @@ jobs:
         uses: maierj/fastlane-action@v1.4.0
         with:
           lane: 'check'
+
+      - name: Use Node.js 12.x
+        uses: actions/setup-node@v1
+        with:
+            node-version: 12.x
+      - name: Install yarn
+        run: npm install -g yarn
+      - name: Install yarn dependencies
+        run: yarn install  --frozen-lockfile
+      - name: Danger
+        env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            DANGER_GITHUB_API_TOKEN: ${{ secrets.DANGER_GITHUB_API_TOKEN }}
+        run: yarn danger ci
