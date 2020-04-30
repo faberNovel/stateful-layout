@@ -10,7 +10,7 @@ import androidx.test.espresso.matcher.ViewMatchers.Visibility.VISIBLE
 import androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import com.fabernovel.statefullayout.sample.R
-import com.fabernovel.statefullayout.utils.isStatefulLayoutState
+import com.fabernovel.statefullayout.utils.withStatefulLayoutStateId
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -31,13 +31,13 @@ class MainFragmentTest {
     fun `when pressing show error, error state should be displayed`() {
         onView(withId(R.id.errorButton)).perform(click())
 
-        onView(isStatefulLayoutState(R.id.stateContent))
+        onView(withStatefulLayoutStateId(R.id.stateContent))
             .check(matches(withEffectiveVisibility(GONE)))
-        onView(isStatefulLayoutState(R.id.stateLoading))
+        onView(withStatefulLayoutStateId(R.id.stateLoading))
             .check(matches(withEffectiveVisibility(GONE)))
-        onView(isStatefulLayoutState(R.id.stateCustom))
+        onView(withStatefulLayoutStateId(R.id.stateCustom))
             .check(matches(withEffectiveVisibility(GONE)))
-        onView(isStatefulLayoutState(R.id.stateError))
+        onView(withStatefulLayoutStateId(R.id.stateError))
             .check(matches(withEffectiveVisibility(VISIBLE)))
     }
 
@@ -45,13 +45,13 @@ class MainFragmentTest {
     fun `when pressing show loading, loading state should be displayed`() {
         onView(withId(R.id.loadingButton)).perform(click())
 
-        onView(isStatefulLayoutState(R.id.stateContent))
+        onView(withStatefulLayoutStateId(R.id.stateContent))
             .check(matches(withEffectiveVisibility(GONE)))
-        onView(isStatefulLayoutState(R.id.stateError))
+        onView(withStatefulLayoutStateId(R.id.stateError))
             .check(matches(withEffectiveVisibility(GONE)))
-        onView(isStatefulLayoutState(R.id.stateCustom))
+        onView(withStatefulLayoutStateId(R.id.stateCustom))
             .check(matches(withEffectiveVisibility(GONE)))
-        onView(isStatefulLayoutState(R.id.stateLoading))
+        onView(withStatefulLayoutStateId(R.id.stateLoading))
             .check(matches(withEffectiveVisibility(VISIBLE)))
     }
 
@@ -59,13 +59,13 @@ class MainFragmentTest {
     fun `when pressing show content, content state should be displayed`() {
         onView(withId(R.id.contentButton)).perform(click())
 
-        onView(isStatefulLayoutState(R.id.stateLoading))
+        onView(withStatefulLayoutStateId(R.id.stateLoading))
             .check(matches(withEffectiveVisibility(GONE)))
-        onView(isStatefulLayoutState(R.id.stateError))
+        onView(withStatefulLayoutStateId(R.id.stateError))
             .check(matches(withEffectiveVisibility(GONE)))
-        onView(isStatefulLayoutState(R.id.stateCustom))
+        onView(withStatefulLayoutStateId(R.id.stateCustom))
             .check(matches(withEffectiveVisibility(GONE)))
-        onView(isStatefulLayoutState(R.id.stateContent))
+        onView(withStatefulLayoutStateId(R.id.stateContent))
             .check(matches(withEffectiveVisibility(VISIBLE)))
     }
 
@@ -73,13 +73,13 @@ class MainFragmentTest {
     fun `when pressing show custom, custom state should be displayed`() {
         onView(withId(R.id.customButton)).perform(click())
 
-        onView(isStatefulLayoutState(R.id.stateLoading))
+        onView(withStatefulLayoutStateId(R.id.stateLoading))
             .check(matches(withEffectiveVisibility(GONE)))
-        onView(isStatefulLayoutState(R.id.stateError))
+        onView(withStatefulLayoutStateId(R.id.stateError))
             .check(matches(withEffectiveVisibility(GONE)))
-        onView(isStatefulLayoutState(R.id.stateContent))
+        onView(withStatefulLayoutStateId(R.id.stateContent))
             .check(matches(withEffectiveVisibility(GONE)))
-        onView(isStatefulLayoutState(R.id.stateCustom))
+        onView(withStatefulLayoutStateId(R.id.stateCustom))
             .check(matches(withEffectiveVisibility(VISIBLE)))
     }
 }

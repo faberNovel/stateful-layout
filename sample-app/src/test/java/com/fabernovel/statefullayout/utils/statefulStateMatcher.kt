@@ -10,5 +10,5 @@ import org.hamcrest.Matcher
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.equalTo
 
-fun isStatefulLayoutState(@IdRes stateId: Int): Matcher<View> =
+fun withStatefulLayoutStateId(@IdRes stateId: Int): Matcher<View> =
     allOf(withId(stateId), withParent(withClassName(equalTo(StatefulLayout::class.java.name))))
