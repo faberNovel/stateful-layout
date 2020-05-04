@@ -1,7 +1,6 @@
 package com.fabernovel.statefullayout.sample.ui.main
 
 import android.os.Build
-import com.fabernovel.statefullayout.robot.`on main fragment`
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
