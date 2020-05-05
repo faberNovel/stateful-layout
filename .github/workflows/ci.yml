@@ -18,9 +18,9 @@ jobs:
         with:
           ruby-version: 2.6
       - name: Install dependencies
-          run: |
-            gem install bundler
-            bundle install
+        run: |
+          gem install bundler
+          bundle install
       - name: Run fastlane checks
         run: bundle exec fastlane checks
       - name: Run Danger
