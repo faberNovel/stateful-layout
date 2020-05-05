@@ -13,25 +13,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-
-      - name: Run checks
-        uses: maierj/fastlane-action@v1.4.0
-        with:
-          lane: 'check'
-
-  danger:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Set up Ruby 2.6
-        uses: actions/setup-ruby@v1
-        with:
-          ruby-version: 2.6
       - name: Install dependencies
         run: |
           gem install bundler
           bundle install
+      - name: Run Fastlane checks
+        run: bundle exec fastlane check
       - name: Run Danger
         run: bundle exec danger
         env:
