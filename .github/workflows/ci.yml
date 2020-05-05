@@ -21,7 +21,7 @@ jobs:
         run: |
           gem install bundler
           bundle install
-      - name: Run fastlane checks
-        run: bundle exec fastlane checks
+      - name: Run fastlane check
+        run: bundle exec fastlane check
       - name: Run Danger
         run: bundle exec danger
