@@ -1,25 +1,12 @@
 name: CI
-
 on:
   push:
     branches-ignore:
       - develop
       - master
       - 'release/**'
-
 jobs:
   build_and_check:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Run checks
-        uses: maierj/fastlane-action@v1.4.0
-        with:
-          lane: 'check'
-
-  danger:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -32,8 +19,3 @@ jobs:
         run: |
           gem install bundler
           bundle install
-      - name: Run Danger
-        run: bundle exec danger
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DANGER_GITHUB_API_TOKEN: ${{ secrets.DANGER_GITHUB_API_TOKEN }}
