@@ -1,9 +1,5 @@
 name: CI
-on:
-  pull_request:
-    branches:
-      - master
-      - develop
+on: pull_request
 jobs:
   build_and_check:
     name: 🛠 Build and check
