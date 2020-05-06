@@ -24,4 +24,7 @@ jobs:
       - name: Run fastlane check
         run: bundle exec fastlane check
       - name: Run Danger
+        env:
+          DANGER_GITHUB_API_TOKEN: ${{ secrets.DANGER_GITHUB_API_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: bundle exec danger
