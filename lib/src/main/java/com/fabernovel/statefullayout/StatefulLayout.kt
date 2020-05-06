@@ -181,17 +181,28 @@ class StatefulLayout : FrameLayout, StateContainer<Int, State> {
      * @throws [NoSuchElementException] if [id] was not found.
      */
     override fun showState(@IdRes id: Int): State {
+        return showState(id, true)
+    }
+
+    /**
+     * Show a state
+     *
+     * @param id
+     * @param playTransition if true, the transition will be played
+     * @return
+     */
+    fun showState(@IdRes id: Int, playTransition: Boolean): State {
         if (currentStateId != View.NO_ID) {
             val currentState = get(currentStateId)
             if (id == currentStateId) {
                 return currentState
             }
-            currentState.hide(defaultExitTransition)
+            currentState.hide(defaultExitTransition, playTransition)
         }
 
         val nextState = states[id]
             ?: throw NoSuchElementException("$id was not found in this StatefulLayout.")
-        nextState.show(defaultEnterTransition)
+        nextState.show(defaultEnterTransition, playTransition)
 
         _currentStateId = id
         return nextState
