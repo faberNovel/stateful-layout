@@ -1,10 +1,9 @@
 name: CI
 on:
-  push:
-    branches-ignore:
-      - develop
+  pull_request:
+    branches:
       - master
-      - 'release/**'
+      - develop
 jobs:
   build_and_check:
     name: 🛠 Build and check
@@ -20,3 +19,13 @@ jobs:
         run: |
           gem install bundler
           bundle install
+  danger:
+    name: 🚧 Danger
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Run Danger
+        uses: danger/danger@master
+        env:
+          DANGER_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
