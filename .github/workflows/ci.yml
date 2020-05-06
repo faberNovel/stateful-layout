@@ -2,7 +2,7 @@ name: CI
 on: pull_request
 jobs:
   build_and_check:
-    name: 🛠 Build and check
+    name: Build and check
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -16,7 +16,7 @@ jobs:
           gem install bundler
           bundle install
   danger:
-    name: 🚧 Danger
+    name: Danger
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
