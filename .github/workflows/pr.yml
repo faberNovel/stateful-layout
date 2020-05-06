@@ -6,6 +6,7 @@ on:
       - develop
 jobs:
   danger:
+    name: 🚧 Danger 
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
