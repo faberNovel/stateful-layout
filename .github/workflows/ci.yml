@@ -6,6 +6,10 @@ on:
       - develop
       - master
       - 'release/**'
+  pull_request:
+    branches:
+      - master
+      - develop
 
 jobs:
   build_and_check:
@@ -26,15 +30,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Set up Ruby 2.6
-        uses: actions/setup-ruby@v1
-        with:
-          ruby-version: 2.6
-      - name: Install dependencies
-        run: |
-          gem install bundler
-          bundle install
+      - name:
       - name: Run Danger
-        run: bundle exec danger
+        uses: danger/danger@master
         env:
           DANGER_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
