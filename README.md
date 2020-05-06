@@ -10,12 +10,14 @@ To contribute please read [the Contribution Guide](docs/CONTRIBUTING.md)
 
 ## Installation
 Add Jitpack:
+
 ```
 repositories {
   ...
   maven { url 'https://jitpack.io' }
 }
 ```
+
 
 Add the dependency:
 ```
@@ -26,6 +28,7 @@ dependencies {
 
 ## Usage
 StatefulLayout allows to create different state for a screen (loading state, content state, missing permission state, etc).
+
 States are referenced using an android resource id.
 
 ### StatefulLayout
@@ -56,6 +59,7 @@ To use it, add a `StatefulLayout` to a layout and put a `State` with `android:id
 
 #### Default states:
 By default, three states are provided:
+
 1. Loading state: `stateLoading`:
   A progress bar in the middle of the screen.
 2. Content state: `stateContent`
@@ -66,6 +70,7 @@ By default, three states are provided:
 To overwrite the view displayed by a default state, there are two ways:
 
 1. Add a `State` with the id you want to overwrite inside your `StatefulLayout`.
+
 For example to create a custom error state:
 ```XML
  <com.fabernovel.statefullayout.StatefulLayout
@@ -157,7 +162,7 @@ errorBinding.stateErrorRetryButton.setOnClickListener {
 #### Theme:
  The library adds a theme attribute `statefulLayoutStyle` which take a `StatefulLayout` style.
  Extend `Widget.Stateful.StatefulLayout` and change the following attributes:  
-
+ 
 `StatefulLayout`:
 | Attribute  | Definition |
 | ------------- | ------------- |
@@ -182,9 +187,11 @@ will be played on every state change excluding state with their own transitions.
 - On a `State` using `enterTransition` and `exitTransition` which override the parent `StatefulLayout`
  transitions.
 
+
 Animation can be either an animator resource or an animation resource.
 To load a state transition programmatically, use the helper class `StateTransitions`.
 `StateTransitions` allow to create a `StateTransition` from:
+ 
 - An `Animator` (https://developer.android.com/reference/android/animation/Animator)
 - An `Animation` (https://developer.android.com/reference/android/view/animation/Animation)
 - A resource version of an animator or an animation.
