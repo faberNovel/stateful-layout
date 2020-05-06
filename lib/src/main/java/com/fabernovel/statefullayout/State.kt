@@ -112,10 +112,13 @@ class State : FrameLayout {
         }
     }
 
-    internal fun show(fallbackTransitionProvider: StateTransitionProvider? = null) {
+    internal fun show(
+        fallbackTransitionProvider: StateTransitionProvider? = null,
+        playTransition: Boolean = true
+    ) {
         currentTransition?.cancel()
         val transition = enterTransition ?: fallbackTransitionProvider?.get()
-        if (transition == null) {
+        if (transition == null || !playTransition) {
             visibility = View.VISIBLE
         } else {
             currentTransition = transition
@@ -127,10 +130,13 @@ class State : FrameLayout {
         }
     }
 
-    internal fun hide(fallbackTransitionProvider: StateTransitionProvider? = null) {
+    internal fun hide(
+        fallbackTransitionProvider: StateTransitionProvider? = null,
+        playTransition: Boolean = true
+    ) {
         currentTransition?.cancel()
         val transition = exitTransition ?: fallbackTransitionProvider?.get()
-        if (transition == null) {
+        if (transition == null || !playTransition) {
             visibility = View.GONE
         } else {
             currentTransition = transition
