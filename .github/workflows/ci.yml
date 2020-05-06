@@ -2,7 +2,7 @@ name: CI
 on: pull_request
 jobs:
   build_and_check:
-    name: 🛠 Build and check
+    name: Build and check
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -18,7 +18,7 @@ jobs:
       - name: Launch check
         run: bundle exec fastlane check
   danger:
-    name: 🚧 Danger
+    name: Danger
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
