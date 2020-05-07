@@ -15,6 +15,8 @@ jobs:
         run: |
           gem install bundler
           bundle install
+      - name: Launch check
+        run: gem exec fastlane check
   danger:
     name: 🚧 Danger
     runs-on: ubuntu-latest
