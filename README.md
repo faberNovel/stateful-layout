@@ -166,6 +166,7 @@ errorBinding.stateErrorRetryButton.setOnClickListener {
 | initialState  | Id of the initially displayed state. (by default: none)  |
 | defaultEnterTransition  | Default enter transition. (by default: none)  |
 | defaultExitTransition  | Default exit transition. (by default: none)  |
+| areTransitionsEnabled | Play transitions when changing state (by default: true) |
 
 `State` also have an theme attribute `stateStyle` and a default style `Widget.Stateful.State`
 | Attribute  | Definition |
