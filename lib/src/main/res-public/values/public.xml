@@ -9,6 +9,7 @@
     <!-- StatefulLayout style attributes -->
     <public type="style" name="Widget.Stateful.StatefulLayout"/>
     <public type="attr" name="statefulLayoutStyle" />
+    <public type="attr" name="areTransitionsEnabled" />
     <public type="attr" name="loadingStateLayout"/>
     <public type="attr" name="errorStateLayout"/>
     <public type="attr" name="initialState"/>

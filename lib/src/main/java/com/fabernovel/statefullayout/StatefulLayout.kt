@@ -37,6 +37,11 @@ class StatefulLayout : FrameLayout, StateContainer<Int, State> {
      */
     var defaultExitTransition: StateTransitionProvider? = null
 
+    /**
+     * If disable no [StateTransition] will be played
+     */
+    var areTransitionsEnabled: Boolean = true
+
     constructor(context: Context) : this(context, null)
 
     constructor(context: Context, attrs: AttributeSet?) : this(
@@ -78,7 +83,7 @@ class StatefulLayout : FrameLayout, StateContainer<Int, State> {
             inflateLoadingState(array)
             inflateErrorState(array)
 
-            loadDefaultAnimations(array)
+            loadDefaultTransitions(array)
 
             initialStateId = array.getResourceId(
                 R.styleable.StatefulLayout_initialState,
@@ -89,7 +94,13 @@ class StatefulLayout : FrameLayout, StateContainer<Int, State> {
         }
     }
 
-    private fun loadDefaultAnimations(array: TypedArray) {
+    private fun loadDefaultTransitions(array: TypedArray) {
+        val areTransitionsEnabled = array.getBoolean(
+            R.styleable.StatefulLayout_areTransitionsEnabled,
+            true
+        )
+        this.areTransitionsEnabled = areTransitionsEnabled
+
         val defaultEnterAnimRes = array.getResourceId(
             R.styleable.StatefulLayout_defaultEnterTransition,
             0
@@ -181,28 +192,28 @@ class StatefulLayout : FrameLayout, StateContainer<Int, State> {
      * @throws [NoSuchElementException] if [id] was not found.
      */
     override fun showState(@IdRes id: Int): State {
-        return showState(id, true)
+        return showState(id, areTransitionsEnabled)
     }
 
     /**
      * Show a state
      *
      * @param id
-     * @param playTransition if true, the transition will be played
+     * @param areTransitionEnabled if true, the transition will be played
      * @return
      */
-    fun showState(@IdRes id: Int, playTransition: Boolean): State {
+    fun showState(@IdRes id: Int, areTransitionEnabled: Boolean): State {
         if (currentStateId != View.NO_ID) {
             val currentState = get(currentStateId)
             if (id == currentStateId) {
                 return currentState
             }
-            currentState.hide(defaultExitTransition, playTransition)
+            currentState.hide(defaultExitTransition, areTransitionEnabled)
         }
 
         val nextState = states[id]
             ?: throw NoSuchElementException("$id was not found in this StatefulLayout.")
-        nextState.show(defaultEnterTransition, playTransition)
+        nextState.show(defaultEnterTransition, areTransitionEnabled)
 
         _currentStateId = id
         return nextState

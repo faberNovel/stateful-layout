@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Run Danger to validate PR
 - Add a contribution guide
 - Add `showState(@IdRes id: Int, playTransition: Boolean)` to StatefulLayout to disable transition
+- Stateful layouts now have a `areTransitionsEnabled` attribute to enable/disable transitions
 
 ## [1.0-RC4] - 27/04/2020
 ### Changed
