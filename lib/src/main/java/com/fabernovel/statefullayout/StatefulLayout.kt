@@ -38,7 +38,7 @@ class StatefulLayout : FrameLayout, StateContainer<Int, State> {
     var defaultExitTransition: StateTransitionProvider? = null
 
     /**
-     * If disable no [StateTransition] will be played
+     * If disabled no [StateTransition] will be played
      */
     var areTransitionsEnabled: Boolean = true
 
@@ -185,7 +185,10 @@ class StatefulLayout : FrameLayout, StateContainer<Int, State> {
     }
 
     /**
-     * Show a state
+     * Show a state.
+     *
+     * Note:
+     *  If [areTransitionsEnabled] is disabled, no transition will be played.
      *
      * @param id state's id
      * @return shown state
@@ -196,24 +199,25 @@ class StatefulLayout : FrameLayout, StateContainer<Int, State> {
     }
 
     /**
-     * Show a state
+     * Show a state.
      *
      * @param id
-     * @param areTransitionEnabled if true, the transition will be played
+     * @param showTransitions if true, the transition will be played
+     *  (overrides [areTransitionsEnabled])
      * @return
      */
-    fun showState(@IdRes id: Int, areTransitionEnabled: Boolean): State {
+    fun showState(@IdRes id: Int, showTransitions: Boolean): State {
         if (currentStateId != View.NO_ID) {
             val currentState = get(currentStateId)
             if (id == currentStateId) {
                 return currentState
             }
-            currentState.hide(defaultExitTransition, areTransitionEnabled)
+            currentState.hide(defaultExitTransition, showTransitions)
         }
 
         val nextState = states[id]
             ?: throw NoSuchElementException("$id was not found in this StatefulLayout.")
-        nextState.show(defaultEnterTransition, areTransitionEnabled)
+        nextState.show(defaultEnterTransition, showTransitions)
 
         _currentStateId = id
         return nextState
