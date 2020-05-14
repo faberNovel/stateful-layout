@@ -5,15 +5,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
-## Changed
+### Changed
 - Upgrade Android Gradle Plugin to 3.6.3
 - Upgrade Kotlin to 1.3.72
-## Added
+### Added
 - Add units tests in the sample app
 - Run Danger to validate PR
 - Add a contribution guide
 - Add `showState(@IdRes id: Int, showTransitions: Boolean)` to StatefulLayout to disable transition
 - Stateful layouts now have a `areTransitionsEnabled` attribute to enable/disable transitions
+### Fixed
+- Remove duplicates in view hierarchy when trying to overload an existing state
 
 ## [1.0-RC4] - 27/04/2020
 ### Changed
