@@ -24,6 +24,4 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Run Danger
-        uses: danger/danger@master
-        env:
-          DANGER_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+	run: echo "Danger is disabled for now. Not working on forks"
