@@ -151,8 +151,16 @@ class StatefulLayout : FrameLayout, StateContainer<Int, State> {
         if (childId == View.NO_ID) {
             throw IllegalArgumentException("StatefulLayout states should have an id. ($child)")
         }
+        removeExistingStateView(childId)
         child.isVisible = childId == initialStateId
         states[childId] = child
+    }
+
+    private fun removeExistingStateView(@IdRes stateId: Int) {
+        val existingStateView = states[stateId]
+        if (existingStateView != null) {
+            removeView(existingStateView)
+        }
     }
 
     override fun onFinishInflate() {
