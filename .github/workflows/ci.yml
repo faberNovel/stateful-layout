@@ -4,16 +4,12 @@ jobs:
   build_and_check:
     name: Build and check
     runs-on: ubuntu-latest
+    container:
+      image: docker://fabernovel/android:api-29-v1.1.0
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Set up Ruby 2.6
-        uses: actions/setup-ruby@v1
-        with:
-          ruby-version: 2.6
       - name: Install dependencies
-        run: |
-          gem install bundler
-          bundle install
+        run: bundle install
       - name: Launch check
         run: bundle exec fastlane check
