@@ -17,11 +17,3 @@ jobs:
           bundle install
       - name: Launch check
         run: bundle exec fastlane check
-  danger:
-    name: Danger
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Run Danger
-	run: echo "Danger is disabled for now. Not working on forks"
