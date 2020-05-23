@@ -2,6 +2,7 @@ package com.fabernovel.statefullayout
 
 import android.view.View
 import android.widget.Button
+import android.widget.TextView
 import androidx.annotation.IdRes
 import androidx.annotation.LayoutRes
 
@@ -58,21 +59,38 @@ fun StatefulLayout.requireStateView(@IdRes key: Int): View {
 /**
  * Convenient method to show the built-in error state by calling [StatefulLayout.showState] with
  *  [R.id.stateError].
+ * @param errorMessage if not null sets text of the TextView with id [R.id.stateErrorTitle]
  * @param onRetryListener if not null sets a [View.OnClickListener] on the button [R.id.stateErrorRetryButton]
  * @return the error state
  */
-fun StatefulLayout.showError(onRetryListener: ((View) -> Unit)? = null): State {
-    val errorState = showState(R.id.stateError)
-    if (onRetryListener != null) {
-        val retryButton = errorState.findViewById<Button>(R.id.stateErrorRetryButton)
-        requireNotNull(retryButton) {
-            "The layout associated to the state 'stateError' must contain a Button with the id " +
-            "'stateErrorRetryButton'"
-        }
-
-        retryButton.setOnClickListener(onRetryListener)
+fun StatefulLayout.showError(
+    errorMessage: String? = null,
+    onRetryListener: ((View) -> Unit)? = null
+): State {
+    return showState(R.id.stateError).apply {
+        if (errorMessage != null) setErrorMessage(errorMessage)
+        if (onRetryListener != null) setErrorRetryListener(onRetryListener)
     }
-    return errorState
+}
+
+private fun State.setErrorMessage(errorMessage: String) {
+    val errorTextView = findViewById<TextView>(R.id.stateErrorTitle)
+    requireNotNull(errorTextView) {
+        "The layout associated to the state 'stateError' must contain a TextView with the id " +
+            "'stateErrorTitle'"
+    }
+
+    errorTextView.text = errorMessage
+}
+
+private fun State.setErrorRetryListener(onRetryListener: (View) -> Unit) {
+    val retryButton = findViewById<Button>(R.id.stateErrorRetryButton)
+    requireNotNull(retryButton) {
+        "The layout associated to the state 'stateError' must contain a Button with the id " +
+            "'stateErrorRetryButton'"
+    }
+
+    retryButton.setOnClickListener(onRetryListener)
 }
 
 /**
