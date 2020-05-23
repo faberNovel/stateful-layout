@@ -46,7 +46,7 @@ class MainFragment : Fragment() {
             stateContent.enterTransition = buildEnterTransition()
             stateContent.exitTransition = buildExitTransition()
             errorButton.setOnClickListener {
-                statefulLayout.showError {
+                statefulLayout.showError("There was an error") {
                     Toast.makeText(context, "Retry", Toast.LENGTH_SHORT).show()
                 }
             }
