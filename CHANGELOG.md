@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Stateful layouts now have a `areTransitionsEnabled` attribute to enable/disable transitions
 ### Fixed
 - Remove duplicates in view hierarchy when trying to overload an existing state
+- State constructor parameters were reversed, breaking up Android Studio preview
 
 ## [1.0-RC4] - 27/04/2020
 ### Changed
