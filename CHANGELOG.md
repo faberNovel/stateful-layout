@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add a contribution guide
 - Add `showState(@IdRes id: Int, showTransitions: Boolean)` to StatefulLayout to disable transition
 - Stateful layouts now have a `areTransitionsEnabled` attribute to enable/disable transitions
+- Add util method to play android.transition.Transition
 ### Fixed
 - Remove duplicates in view hierarchy when trying to overload an existing state
 

@@ -1,5 +1,7 @@
 package com.fabernovel.statefullayout
 
+import android.transition.Transition
+import android.transition.TransitionManager
 import android.view.View
 import android.widget.Button
 import androidx.annotation.IdRes
@@ -67,7 +69,7 @@ fun StatefulLayout.showError(onRetryListener: ((View) -> Unit)? = null): State {
         val retryButton = errorState.findViewById<Button>(R.id.stateErrorRetryButton)
         requireNotNull(retryButton) {
             "The layout associated to the state 'stateError' must contain a Button with the id " +
-            "'stateErrorRetryButton'"
+                "'stateErrorRetryButton'"
         }
 
         retryButton.setOnClickListener(onRetryListener)
@@ -88,3 +90,12 @@ fun StatefulLayout.showLoading(): State = showState(R.id.stateLoading)
  * @return the content state
  */
 fun StatefulLayout.showContent(): State = showState(R.id.stateContent)
+
+/**
+ * Convenient method to show a state and play an [Transition]
+ * See https://developer.android.com/training/transitions for reference
+ */
+fun StatefulLayout.showState(@IdRes id: Int, transition: Transition): State {
+    TransitionManager.beginDelayedTransition(this, transition)
+    return showState(id, false)
+}
