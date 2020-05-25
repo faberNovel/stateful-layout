@@ -5,7 +5,10 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
+import androidx.annotation.AttrRes
 import androidx.annotation.LayoutRes
+import androidx.annotation.StyleRes
+import com.fabernovel.statefullayout.R.styleable
 import com.fabernovel.statefullayout.transitions.StateTransition
 import com.fabernovel.statefullayout.transitions.StateTransitionListener
 import com.fabernovel.statefullayout.transitions.StateTransitionProvider
@@ -39,39 +42,48 @@ class State : FrameLayout {
     constructor(
         context: Context,
         attrs: AttributeSet?
-    ) : this(context, attrs, R.style.Widget_Stateful_State)
+    ) : this(context, attrs, R.attr.stateStyle)
 
     constructor(
         context: Context,
         attrs: AttributeSet?,
-        defStyle: Int
-    ) : this(context, attrs, defStyle, R.attr.stateStyle)
+        @AttrRes defStyleAttr: Int
+    ) : this(context, attrs, defStyleAttr, R.style.Widget_Stateful_State)
 
     constructor(
+        context: Context,
+        attrs: AttributeSet?,
+        @AttrRes defStyleAttr: Int,
+        @StyleRes defStyleRes: Int
+    ) : super(context, attrs, defStyleAttr, defStyleRes) {
+        init(context, attrs, defStyleAttr, defStyleRes)
+    }
+
+    private fun init(
         context: Context,
         attrs: AttributeSet?,
         defStyle: Int,
         defStyleRes: Int
-    ) : super(context, attrs, defStyle, defStyleRes) {
+    ) {
         val array = context.obtainStyledAttributes(
             attrs,
-            R.styleable.State,
+            styleable.State,
             defStyle,
             defStyleRes
         )
         try {
-            val enterAnimRes = array.getResourceId(R.styleable.State_enterTransition, 0)
+            val enterAnimRes = array.getResourceId(styleable.State_enterTransition, 0)
 
             if (enterAnimRes != 0) {
                 enterTransition = StateTransitions.fromResource(context, enterAnimRes)
             }
-            val exitAnimRes = array.getResourceId(R.styleable.State_exitTransition, 0)
+            val exitAnimRes = array.getResourceId(styleable.State_exitTransition, 0)
             if (exitAnimRes != 0) {
                 exitTransition = StateTransitions.fromResource(context, exitAnimRes)
             }
 
             @LayoutRes
-            val contentLayout = array.getResourceId(R.styleable.State_contentLayout, 0)
+            val contentLayout = array.getResourceId(styleable.State_contentLayout, 0)
             if (contentLayout != 0) {
                 setContentView(contentLayout)
             }

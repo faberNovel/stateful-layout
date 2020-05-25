@@ -53,22 +53,22 @@ class StatefulLayout : FrameLayout, StateContainer<Int, State> {
     constructor(
         context: Context,
         attrs: AttributeSet?,
-        @AttrRes defStyle: Int
-    ) : this(context, attrs, defStyle, R.style.Widget_Stateful_StatefulLayout)
+        @AttrRes defAttrRes: Int
+    ) : this(context, attrs, defAttrRes, R.style.Widget_Stateful_StatefulLayout)
 
     constructor(
         context: Context,
         attrs: AttributeSet?,
-        @AttrRes defStyle: Int,
+        @AttrRes defAttrRes: Int,
         @StyleRes defStyleRes: Int
-    ) : super(context, attrs, defStyle, defStyleRes) {
-        init(context, attrs, defStyle, defStyleRes)
+    ) : super(context, attrs, defAttrRes, defStyleRes) {
+        init(context, attrs, defAttrRes, defStyleRes)
     }
 
     private fun init(
         context: Context,
         attrs: AttributeSet?,
-        @AttrRes defStyle: Int,
+        @AttrRes defAttrRes: Int,
         @StyleRes defStyleRes: Int
     ) {
         isSaveEnabled = true
@@ -76,7 +76,7 @@ class StatefulLayout : FrameLayout, StateContainer<Int, State> {
         val array = context.obtainStyledAttributes(
             attrs,
             R.styleable.StatefulLayout,
-            defStyle,
+            defAttrRes,
             defStyleRes
         )
         try {
@@ -142,7 +142,7 @@ class StatefulLayout : FrameLayout, StateContainer<Int, State> {
     }
 
     override fun onViewAdded(child: View?) {
-        super.onViewAdded(child)
+        child?.isVisible = child?.id == initialStateId
         if (child !is State) {
             throw IllegalArgumentException("StatefulLayout child must be a State. ($child)")
         }
@@ -165,13 +165,10 @@ class StatefulLayout : FrameLayout, StateContainer<Int, State> {
 
     override fun onFinishInflate() {
         super.onFinishInflate()
-        states.values.onEach { it.visibility = View.GONE }
-        if (initialStateId != View.NO_ID) {
-            val initialState = get(initialStateId)
-            initialState.visibility = View.VISIBLE
-
-            _currentStateId = initialStateId
+        states.forEach { (id, state) ->
+            state.isVisible = id == initialStateId
         }
+        _currentStateId = initialStateId
     }
 
     override fun onSaveInstanceState(): Parcelable? {
