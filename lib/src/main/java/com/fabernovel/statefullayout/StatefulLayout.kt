@@ -142,6 +142,7 @@ class StatefulLayout : FrameLayout, StateContainer<Int, State> {
     }
 
     override fun onViewAdded(child: View?) {
+        super.onViewAdded(child)
         child?.isVisible = child?.id == initialStateId
         if (child !is State) {
             throw IllegalArgumentException("StatefulLayout child must be a State. ($child)")
