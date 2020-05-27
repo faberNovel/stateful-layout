@@ -5,8 +5,11 @@ Android StatefulLayout
 
 [Changelog](CHANGELOG.md)
 
+## Contribution
+To contribute please read [the Contribution Guide](docs/CONTRIBUTING.md)
+
 ## Installation
-Add Jitpack: 
+Add Jitpack:
 ```
 repositories {
   ...
@@ -14,7 +17,7 @@ repositories {
 }
 ```
 
-Add the dependency: 
+Add the dependency:
 ```
 dependencies {
   implementation 'com.github.fabernovel:stateful-layout:<Version>'
@@ -23,12 +26,12 @@ dependencies {
 
 ## Usage
 StatefulLayout allows to create different state for a screen (loading state, content state, missing permission state, etc).
-States are referenced using an android resource id. 
+States are referenced using an android resource id.
 
 ### StatefulLayout
 
-`StatefulLayout` is a view group containing a set of `State`. 
-Each `State` must have an id which will be used to display them when needed. 
+`StatefulLayout` is a view group containing a set of `State`.
+Each `State` must have an id which will be used to display them when needed.
 
 To use it, add a `StatefulLayout` to a layout and put a `State` with `android:id="@id/stateContent` to define the normal content state.
 ``` XML
@@ -51,8 +54,8 @@ To use it, add a `StatefulLayout` to a layout and put a `State` with `android:id
     </com.fabernovel.statefullayout.StatefulLayout>
 ```
 
-#### Default states: 
-By default, three states are provided: 
+#### Default states:
+By default, three states are provided:
 1. Loading state: `stateLoading`:
   A progress bar in the middle of the screen.
 2. Content state: `stateContent`
@@ -60,9 +63,9 @@ By default, three states are provided:
 3. Error state: `stateError`
   An error screen with a retry button
 
-To overwrite the view displayed by a default state, there are two ways: 
+To overwrite the view displayed by a default state, there are two ways:
 
-1. Add a `State` with the id you want to overwrite inside your `StatefulLayout`. 
+1. Add a `State` with the id you want to overwrite inside your `StatefulLayout`.
 For example to create a custom error state:
 ```XML
  <com.fabernovel.statefullayout.StatefulLayout
@@ -86,12 +89,12 @@ For example to create a custom error state:
 2. Pass a layout resource to a `StatefulLayout` layout view:
   - `app:loadingStateLayout` for the loading state.
   - `app:errorStateLayout` for the error state.
-  
+
 #### Custom state:
 To add a custom state, add a `State` inside a `StatefulLayout`.
-*Warnings*: 
+*Warnings*:
 - State can only have *one* child view
-- State *must* have an id. 
+- State *must* have an id.
 
 State's child can be set:
 1. In the layout by set a layout as `contentLayout` attribute.
@@ -125,28 +128,28 @@ State's child can be set:
 
 `State` can also be added programmatically to a `StatefulLayout` (they still need to have an id).
 
-You can access a state content view using `contentView` or `requireContentView` which check 
-if view is null. 
+You can access a state content view using `contentView` or `requireContentView` which check
+if view is null.
 
 #### Change the displayed state:
-To change the displayed state, call `showState(@IdRes id: Int)` with your state's id. 
+To change the displayed state, call `showState(@IdRes id: Int)` with your state's id.
 Default state also have their kotlin extensions for convenience:
-- `showError(onRetryListener: ((View) -> Unit = {})?)` 
+- `showError(onRetryListener: ((View) -> Unit = {})?)`
 - `showLoading()`
 - `showContent()`
 
 #### Add listeners to state's views
-If the state is in a layout, it can be accessed like any other view. 
+If the state is in a layout, it can be accessed like any other view.
 To access views from layout that are inflated by the `StatefulLayout`, the recommended way is to
 use Android View Binding. (https://developer.android.com/topic/libraries/view-binding)
-To get a stateView you can use `requireStateView(<stateId>)` extension. 
+To get a stateView you can use `requireStateView(<stateId>)` extension.
 
 ``` kotlin
 // ...
 val errorStateView = binding.requireStateView(R.id.stateError)       
 val errorBinding = StateErrorBinding.bind(errorStateView)
 
-errorBinding.stateErrorRetryButton.setOnClickListener { 
+errorBinding.stateErrorRetryButton.setOnClickListener {
     // do whatever
 }
 ```     
@@ -154,7 +157,7 @@ errorBinding.stateErrorRetryButton.setOnClickListener {
 #### Theme:
  The library adds a theme attribute `statefulLayoutStyle` which take a `StatefulLayout` style.
  Extend `Widget.Stateful.StatefulLayout` and change the following attributes:  
- 
+
 `StatefulLayout`:
 | Attribute  | Definition |
 | ------------- | ------------- |
@@ -163,7 +166,7 @@ errorBinding.stateErrorRetryButton.setOnClickListener {
 | initialState  | Id of the initially displayed state. (by default: none)  |
 | defaultEnterTransition  | Default enter transition. (by default: none)  |
 | defaultExitTransition  | Default exit transition. (by default: none)  |
-
+| areTransitionsEnabled | Play transitions when changing state (by default: true) |
 `State` also have an theme attribute `stateStyle` and a default style `Widget.Stateful.State`
 | Attribute  | Definition |
 | ------------- | ------------- |
@@ -178,10 +181,10 @@ animation:
 will be played on every state change excluding state with their own transitions.
 - On a `State` using `enterTransition` and `exitTransition` which override the parent `StatefulLayout`
  transitions.
- 
+
 Animation can be either an animator resource or an animation resource.
 To load a state transition programmatically, use the helper class `StateTransitions`.
-`StateTransitions` allow to create a `StateTransition` from: 
+`StateTransitions` allow to create a `StateTransition` from:
 - An `Animator` (https://developer.android.com/reference/android/animation/Animator)
 - An `Animation` (https://developer.android.com/reference/android/view/animation/Animation)
 - A resource version of an animator or an animation.

@@ -37,6 +37,11 @@ class StatefulLayout : FrameLayout, StateContainer<Int, State> {
      */
     var defaultExitTransition: StateTransitionProvider? = null
 
+    /**
+     * If disabled no [StateTransition] will be played
+     */
+    var areTransitionsEnabled: Boolean = true
+
     constructor(context: Context) : this(context, null)
 
     constructor(context: Context, attrs: AttributeSet?) : this(
@@ -48,22 +53,22 @@ class StatefulLayout : FrameLayout, StateContainer<Int, State> {
     constructor(
         context: Context,
         attrs: AttributeSet?,
-        @AttrRes defStyle: Int
-    ) : this(context, attrs, defStyle, R.style.Widget_Stateful_StatefulLayout)
+        @AttrRes defAttrRes: Int
+    ) : this(context, attrs, defAttrRes, R.style.Widget_Stateful_StatefulLayout)
 
     constructor(
         context: Context,
         attrs: AttributeSet?,
-        @AttrRes defStyle: Int,
+        @AttrRes defAttrRes: Int,
         @StyleRes defStyleRes: Int
-    ) : super(context, attrs, defStyle, defStyleRes) {
-        init(context, attrs, defStyle, defStyleRes)
+    ) : super(context, attrs, defAttrRes, defStyleRes) {
+        init(context, attrs, defAttrRes, defStyleRes)
     }
 
     private fun init(
         context: Context,
         attrs: AttributeSet?,
-        @AttrRes defStyle: Int,
+        @AttrRes defAttrRes: Int,
         @StyleRes defStyleRes: Int
     ) {
         isSaveEnabled = true
@@ -71,14 +76,14 @@ class StatefulLayout : FrameLayout, StateContainer<Int, State> {
         val array = context.obtainStyledAttributes(
             attrs,
             R.styleable.StatefulLayout,
-            defStyle,
+            defAttrRes,
             defStyleRes
         )
         try {
             inflateLoadingState(array)
             inflateErrorState(array)
 
-            loadDefaultAnimations(array)
+            loadDefaultTransitions(array)
 
             initialStateId = array.getResourceId(
                 R.styleable.StatefulLayout_initialState,
@@ -89,7 +94,13 @@ class StatefulLayout : FrameLayout, StateContainer<Int, State> {
         }
     }
 
-    private fun loadDefaultAnimations(array: TypedArray) {
+    private fun loadDefaultTransitions(array: TypedArray) {
+        val areTransitionsEnabled = array.getBoolean(
+            R.styleable.StatefulLayout_areTransitionsEnabled,
+            true
+        )
+        this.areTransitionsEnabled = areTransitionsEnabled
+
         val defaultEnterAnimRes = array.getResourceId(
             R.styleable.StatefulLayout_defaultEnterTransition,
             0
@@ -132,6 +143,7 @@ class StatefulLayout : FrameLayout, StateContainer<Int, State> {
 
     override fun onViewAdded(child: View?) {
         super.onViewAdded(child)
+        child?.isVisible = child?.id == initialStateId
         if (child !is State) {
             throw IllegalArgumentException("StatefulLayout child must be a State. ($child)")
         }
@@ -140,19 +152,24 @@ class StatefulLayout : FrameLayout, StateContainer<Int, State> {
         if (childId == View.NO_ID) {
             throw IllegalArgumentException("StatefulLayout states should have an id. ($child)")
         }
+        removeExistingStateView(childId)
         child.isVisible = childId == initialStateId
         states[childId] = child
     }
 
+    private fun removeExistingStateView(@IdRes stateId: Int) {
+        val existingStateView = states[stateId]
+        if (existingStateView != null) {
+            removeView(existingStateView)
+        }
+    }
+
     override fun onFinishInflate() {
         super.onFinishInflate()
-        states.values.onEach { it.visibility = View.GONE }
-        if (initialStateId != View.NO_ID) {
-            val initialState = get(initialStateId)
-            initialState.visibility = View.VISIBLE
-
-            _currentStateId = initialStateId
+        states.forEach { (id, state) ->
+            state.isVisible = id == initialStateId
         }
+        _currentStateId = initialStateId
     }
 
     override fun onSaveInstanceState(): Parcelable? {
@@ -174,24 +191,39 @@ class StatefulLayout : FrameLayout, StateContainer<Int, State> {
     }
 
     /**
-     * Show a state
+     * Show a state.
+     *
+     * Note:
+     *  If [areTransitionsEnabled] is disabled, no transition will be played.
      *
      * @param id state's id
      * @return shown state
      * @throws [NoSuchElementException] if [id] was not found.
      */
     override fun showState(@IdRes id: Int): State {
+        return showState(id, areTransitionsEnabled)
+    }
+
+    /**
+     * Show a state.
+     *
+     * @param id
+     * @param showTransitions if true, the transition will be played
+     *  (overrides [areTransitionsEnabled])
+     * @return
+     */
+    fun showState(@IdRes id: Int, showTransitions: Boolean): State {
         if (currentStateId != View.NO_ID) {
             val currentState = get(currentStateId)
             if (id == currentStateId) {
                 return currentState
             }
-            currentState.hide(defaultExitTransition)
+            currentState.hide(defaultExitTransition, showTransitions)
         }
 
         val nextState = states[id]
             ?: throw NoSuchElementException("$id was not found in this StatefulLayout.")
-        nextState.show(defaultEnterTransition)
+        nextState.show(defaultEnterTransition, showTransitions)
 
         _currentStateId = id
         return nextState

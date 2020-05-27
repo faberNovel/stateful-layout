@@ -4,6 +4,7 @@
         parent="">
         <item name="loadingStateLayout">@layout/state_loading</item>
         <item name="errorStateLayout">@layout/state_error</item>
+        <item name="areTransitionsEnabled">true</item>
     </style>
 
     <style name="Widget.Stateful.State"

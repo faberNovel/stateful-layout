@@ -1,0 +1,58 @@
+name: CD with Github Release
+
+on:
+  push:
+    branches: master
+
+jobs:
+
+  build_aar:
+    runs-on: ubuntu-18.04
+    # only if it's a merge commit of a release branch
+    if: "contains(github.event.head_commit.message, 'Merge pull request') && contains(github.event.head_commit.message, 'release/')"
+    container:
+      image: docker://fabernovel/android:api-29-v1.1.0
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Build the aar
+        run: ./gradlew lib:assembleRelease
+      - name: Get version name
+        id: get_version_name
+
+        # extract version name from the release branch merge commit message
+        run: |
+          VERSION_NAME=$(git log -n 1 --pretty=format:%s | cut -d "/" -f3)
+          echo "version name is $VERSION_NAME"
+          echo "::set-env name=version_name::$VERSION_NAME"
+
+      - name: Extract latest changelog paragraph
+        id: extract_changelog
+        run: |
+          grep -n "^## .*" CHANGELOG.md | cut -d : -f 1 >> tmp_changelog_lines.txt
+          beginning=$(sed -n 2p tmp_changelog_lines.txt)
+          end=$(sed -n 3p tmp_changelog_lines.txt)
+          sed -n $beginning,$(($end-1))p CHANGELOG.md >> version_changelog.txt
+
+      - name: Create a Release
+        id: create_release
+        # move back to actions/create-release once actions/create-release/pull/50 is merged
+        uses: jbolda/create-release@v1.1.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ env.version_name }}
+          release_name: Release ${{ env.version_name }}
+          bodyFromFile: version_changelog.txt
+
+      - name: Upload the AAR Release Asset
+        uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: lib/build/outputs/aar/lib-release.aar
+          asset_name: stateful-library.aar
+          asset_content_type: application/java-archive
