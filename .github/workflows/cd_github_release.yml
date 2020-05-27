@@ -19,7 +19,7 @@ jobs:
 
       - name: Build the aar
         run: ./gradlew lib:assembleRelease
-      - name: Get version nameq
+      - name: Get version name
         id: get_version_name
 
         # extract version name from the release branch merge commit message
