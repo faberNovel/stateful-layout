@@ -11,9 +11,17 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Get version name
+        id: get_version_name
+        # extract version name from the release branch merge commit message
+        run: |
+          VERSION_NAME=$(git log -n 1 --pretty=format:%s | cut -d "/" -f3)
+          echo "version name is $VERSION_NAME"
+          echo "::set-env name=version_name::$VERSION_NAME"
       - name: Install dependencies
         run: bundle install
-      - name: Launch check
+      - name: Release library
         run: bundle exec fastlane release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION_NAME: ${{ env.version_name }}
