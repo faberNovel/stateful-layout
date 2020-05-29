@@ -12,20 +12,66 @@
 
 # Uncomment the line if you want fastlane to automatically update itself
 # update_fastlane
-
 default_platform(:android)
 
 platform :android do
+    OUTPUT_AAR_PATH = "../lib/build/outputs/aar/lib-release.aar"
+    CHANGELOG_PATH = '../CHANGELOG.md'
 
-  desc "Assemble the lib"
-  lane :assemble do
-    gradle(task: "clean assembleRelease")
-  end
-
-  desc "Run assemble, lint and tests"
+    desc "Run assemble, lint and tests"
     lane :check do
-      gradle(task: "clean assembleDebug")
-      gradle(task: "lintDebug ktlintDebugCheck")
-      gradle(task: "testDebug")
+        build(build_type: "debug")
+        gradle(tasks: ['lintDebug', 'ktlintDebugCheck', 'testDebug'])
+    end
+
+    desc "Release the library"
+    lane :release do
+        ensure_git_status_clean
+        version_name = extract_version_name
+        changelog_entry = extract_changelog_last_entry
+
+        aar_path = build(build_type: 'release')
+
+        github_release = set_github_release(
+          repository_name: 'faberNovel/stateful-layout',
+          api_token: ENV['GITHUB_TOKEN'],
+          name: "Release #{version_name}",
+          tag_name: version_name,
+          description: changelog_entry,
+          upload_assets: [aar_path]
+        )
+        puts github_release
+    end
+
+    desc "Build the lib"
+    private_lane :build do |options|
+        build_type = options[:build_type] || 'debug'
+        clean = options[:clean] || true
+        gradle(task: 'clean') if clean
+        gradle(
+            task: 'assemble',
+            build_type: build_type
+        )
+        unless File.exist?(OUTPUT_AAR_PATH)
+            UI.error("Library wasn't assembled.")
+        end
+        OUTPUT_AAR_PATH
+    end
+
+    desc "Extract version from branch name"
+    private_lane :extract_version_name do
+        ensure_git_branch(branch: 'release/.*')
+        git_branch.split('/')[1]
+    end
+
+    desc "Extract last changelog entry"
+    private_lane :extract_changelog_last_entry do
+        changelog = File.read(CHANGELOG_PATH)
+        entries = changelog.split(/^(## .*)$/)
+            .drop(1) # drop preambule
+            .each_slice(2)
+            .map(&:join) # join header with its changes
+
+        entries[1]
     end
 end
