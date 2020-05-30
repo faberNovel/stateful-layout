@@ -33,6 +33,10 @@ platform :android do
 
         aar_path = build(build_type: 'release')
 
+        unless ENV['GITHUB_TOKEN']
+            UI.user_error("No GITHUB_TOKEN.")
+        end
+        UI.message(changelog_entry)
         github_release = set_github_release(
           repository_name: 'faberNovel/stateful-layout',
           api_token: ENV['GITHUB_TOKEN'],
