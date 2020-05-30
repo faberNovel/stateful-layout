@@ -1,7 +1,5 @@
 name: Test release
-on:
-  push:
-    branches: master
+on: push
 jobs:
   create_release:
     name: Create release
