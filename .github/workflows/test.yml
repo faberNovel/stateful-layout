@@ -11,6 +11,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
       - name: Get version name
         id: get_version_name
         # extract version name from the release branch merge commit message
@@ -19,7 +25,9 @@ jobs:
           echo "version name is $VERSION_NAME"
           echo "::set-env name=version_name::$VERSION_NAME"
       - name: Install dependencies
-        run: bundle install
+        run: |
+          bundle config path vendor/bundle
+          bundle install --jobs 4 --retry 3
       - name: Release library
         run: bundle exec fastlane release
         env:
