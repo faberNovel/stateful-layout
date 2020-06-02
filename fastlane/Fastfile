@@ -28,9 +28,15 @@ platform :android do
     lane :release do |options|
         ensure_git_status_clean
 
+
         repository_name = ENV['GITHUB_REPOSITORY']
-        version_name = ENV['VERSION_NAME']
         changelog_entry = extract_changelog_last_entry
+
+        branch_name = ENV['BRANCH_NAME']
+        if !branch_name.match /^release\/.*$/
+            UI.user_error("Release needs to be done on a release branch.")
+        end
+        version_name = branch_name.delete_prefix("release/")
 
         aar_path = build(build_type: 'release')
 
