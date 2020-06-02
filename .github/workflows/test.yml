@@ -4,7 +4,7 @@ on:
     types: [closed]
 jobs:
   create_release:
-    name: Create release
+    name: Create release (test)
     runs-on: ubuntu-latest
     if: github.event.pull_request.merged == true && github.base_ref == 'test'
     container:
