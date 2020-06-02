@@ -1,7 +1,9 @@
 name: Test release
 on: pull_request
+  types: [closed]
 jobs:
   create_release:
+  if: github.event.pull_request.merged == true && github.head_ref == "test"
     name: Create release
     runs-on: ubuntu-latest
     container:
