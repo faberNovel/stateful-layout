@@ -38,12 +38,14 @@ platform :android do
             UI.user_error("No GITHUB_TOKEN.")
         end
         UI.message(changelog_entry)
+        UI.message(ENV['VERSION_NAME'])
         github_release = set_github_release(
           repository_name: 'faberNovel/stateful-layout',
           api_token: ENV['GITHUB_TOKEN'],
           name: "Release #{version_name}",
           tag_name: version_name,
           description: changelog_entry,
+          commitish: 'master',
           upload_assets: [aar_path]
         )
         puts github_release
