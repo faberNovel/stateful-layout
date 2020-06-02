@@ -32,5 +32,5 @@ jobs:
       - name: Release library
         run: bundle exec fastlane release
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.API_TOKEN }}
           VERSION_NAME: ${{ github.head_ref }}
