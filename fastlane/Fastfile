@@ -25,9 +25,10 @@ platform :android do
     end
 
     desc "Release the library"
-    lane :release do
-        repository_name = ENV['GITHUB_REPOSITORY']
+    lane :release do |options|
         ensure_git_status_clean
+
+        repository_name = ENV['GITHUB_REPOSITORY']
         version_name = ENV['VERSION_NAME']
         changelog_entry = extract_changelog_last_entry
 
