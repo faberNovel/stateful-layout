@@ -12,20 +12,27 @@
 
 # Uncomment the line if you want fastlane to automatically update itself
 # update_fastlane
-
 default_platform(:android)
 
 platform :android do
 
-  desc "Assemble the lib"
-  lane :assemble do
-    gradle(task: "clean assembleRelease")
-  end
-
-  desc "Run assemble, lint and tests"
+    desc "Run assemble, lint and tests"
     lane :check do
-      gradle(task: "clean assembleDebug")
-      gradle(task: "lintDebug ktlintDebugCheck")
-      gradle(task: "testDebug")
+        build(build_type: "debug")
+        gradle(tasks: ['lintDebug', 'ktlintDebugCheck', 'testDebug'])
+    end
+    desc "Build the lib"
+    private_lane :build do |options|
+        build_type = options[:build_type] || 'debug'
+        clean = options[:clean] || true
+        gradle(task: 'clean') if clean
+        gradle(
+            task: 'assemble',
+            build_type: build_type
+        )
+        unless File.exist?(OUTPUT_AAR_PATH)
+            UI.error("Library wasn't assembled.")
+        end
+        OUTPUT_AAR_PATH
     end
 end
