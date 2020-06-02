@@ -1,9 +1,12 @@
 name: Test release
-on: pull_request
+on:
+  pull_request:
+    types: [closed]
 jobs:
   create_release:
     name: Create release
     runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true && github.head_ref == "test"
     container:
       image: docker://fabernovel/android:api-29-v1.1.0
     steps:
