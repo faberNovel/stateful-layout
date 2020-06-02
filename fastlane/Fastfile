@@ -15,7 +15,7 @@
 default_platform(:android)
 
 platform :android do
-    OUTPUT_AAR_PATH = "../lib/build/outputs/aar/lib-release.aar"
+    OUTPUT_AAR_PATH = "lib/build/outputs/aar/lib-release.aar"
     CHANGELOG_PATH = '../CHANGELOG.md'
 
     desc "Run assemble, lint and tests"
