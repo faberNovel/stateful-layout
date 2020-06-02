@@ -34,6 +34,7 @@ platform :android do
             UI.user_error!("Release needs to be done on a release branch.")
         end
         version_name = branch_name.delete_prefix("release/")
+        ensure_sementic_version(version: version_name)
 
         build(build_type: 'release')
         # set_github_release seems to upload from project root.
@@ -53,6 +54,14 @@ platform :android do
           upload_assets: [aar_path]
         )
         puts github_release
+    end
+
+    desc "Ensure version is a sementic version"
+    private_lane :ensure_sementic_version do |options|
+        version = options[:version]
+        if !version.match /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$/
+            UI.user_error!("#{version} is not a sementic version.")
+        end
     end
 
     desc "Extract last changelog entry"
