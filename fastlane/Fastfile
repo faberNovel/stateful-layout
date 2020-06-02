@@ -15,12 +15,56 @@
 default_platform(:android)
 
 platform :android do
+    OUTPUT_AAR_PATH = "lib/build/outputs/aar/lib-release.aar"
+    CHANGELOG_PATH = '../CHANGELOG.md'
 
     desc "Run assemble, lint and tests"
     lane :check do
+        ensure_git_status_clean
         build(build_type: "debug")
         gradle(tasks: ['lintDebug', 'ktlintDebugCheck', 'testDebug'])
     end
+
+    desc "Release the library"
+    lane :github_release do |options|
+        check
+        changelog_entry = extract_changelog_last_entry
+
+        branch_name = options[:branch_name]
+        if !branch_name.match /^release\/.*$/
+            UI.user_error("Release needs to be done on a release branch.")
+        end
+        version_name = branch_name.delete_prefix("release/")
+
+        aar_path = build(build_type: 'release')
+
+        unless ENV['GITHUB_TOKEN']
+            UI.user_error("No GITHUB_TOKEN.")
+        end
+
+        github_release = set_github_release(
+          repository_name: 'faberNovel/stateful-layout',
+          api_token: ENV['GITHUB_TOKEN'],
+          name: "Release #{version_name}",
+          tag_name: version_name,
+          description: changelog_entry,
+          commitish: 'master',
+          upload_assets: [aar_path]
+        )
+        puts github_release
+    end
+
+    desc "Extract last changelog entry"
+    private_lane :extract_changelog_last_entry do
+        changelog = File.read(CHANGELOG_PATH)
+        entries = changelog.split(/^(## .*)$/)
+            .drop(1) # drop preambule
+            .each_slice(2)
+            .map(&:join) # join header with its changes
+
+        entries[1]
+    end
+
     desc "Build the lib"
     private_lane :build do |options|
         build_type = options[:build_type] || 'debug'
