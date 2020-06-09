@@ -1,3 +1,4 @@
 rootProject.name='StatefulLayout'
 include ':lib'
 include ':sample-app'
+include ':test-app'
