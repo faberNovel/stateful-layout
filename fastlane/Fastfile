@@ -12,20 +12,77 @@
 
 # Uncomment the line if you want fastlane to automatically update itself
 # update_fastlane
-
 default_platform(:android)
 
 platform :android do
+    CHANGELOG_PATH = '../CHANGELOG.md'
 
-  desc "Assemble the lib"
-  lane :assemble do
-    gradle(task: "clean assembleRelease")
-  end
-
-  desc "Run assemble, lint and tests"
+    desc "Run assemble, lint and tests"
     lane :check do
-      gradle(task: "clean assembleDebug")
-      gradle(task: "lintDebug ktlintDebugCheck")
-      gradle(task: "testDebug")
+        #ensure_git_status_clean
+        build(build_type: "debug")
+        gradle(tasks: ['lintDebug', 'ktlintDebugCheck', 'testDebug'])
+    end
+
+    desc "Release the library"
+    lane :github_release do |options|
+        check
+        changelog_entry = extract_changelog_last_entry
+
+        branch_name = options[:branch_name]
+        if !branch_name.match /^release\/.*$/
+            UI.user_error!("Release needs to be done on a release branch.")
+        end
+        version_name = branch_name.delete_prefix("release/")
+        ensure_sementic_version(version: version_name)
+
+        build(build_type: 'release')
+        # set_github_release seems to upload from project root.
+        aar_path = "lib/build/outputs/aar/lib-release.aar"
+
+        unless ENV['GITHUB_TOKEN']
+            UI.user_error!("No GITHUB_TOKEN.")
+        end
+
+        github_release = set_github_release(
+          repository_name: 'faberNovel/stateful-layout',
+          api_token: ENV['GITHUB_TOKEN'],
+          name: "Release #{version_name}",
+          tag_name: version_name,
+          description: changelog_entry,
+          commitish: 'master',
+          upload_assets: [aar_path]
+        )
+        puts github_release
+    end
+
+    desc "Ensure version is a sementic version"
+    private_lane :ensure_sementic_version do |options|
+        version = options[:version]
+        if !version.match /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$/
+            UI.user_error!("#{version} is not a sementic version.")
+        end
+    end
+
+    desc "Extract last changelog entry"
+    private_lane :extract_changelog_last_entry do
+        changelog = File.read(CHANGELOG_PATH)
+        entries = changelog.split(/^(## .*)$/)
+            .drop(1) # drop preambule
+            .each_slice(2)
+            .map(&:join) # join header with its changes
+
+        entries[1]
+    end
+
+    desc "Build the lib"
+    private_lane :build do |options|
+        build_type = options[:build_type] || 'debug'
+        clean = options[:clean] || true
+        gradle(task: 'clean') if clean
+        gradle(
+            task: 'assemble',
+            build_type: build_type
+        )
     end
 end
