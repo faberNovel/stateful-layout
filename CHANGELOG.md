@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+## [v1.0.0] - 18/06/2020 
+### Changed
+- Move release logic to fastlane
+
 ## [1.0-RC05] - 26/05/2020
 ### Changed
 - Upgrade Android Gradle Plugin to 3.6.3
