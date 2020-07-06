@@ -18,13 +18,13 @@ import com.fabernovel.statefullayout.transitions.StateTransitions
 /**
  * A layout containing states ([State]). Only one state is displayed at a time.
  */
-class StatefulLayout : FrameLayout, StateContainer<Int, State> {
+open class StatefulLayout : FrameLayout, StateContainer<Int, State> {
     @IdRes private var initialStateId: Int = View.NO_ID
 
     private val states: MutableMap<Int, State> = mutableMapOf()
 
     @IdRes private var _currentStateId: Int = View.NO_ID
-    override val currentStateId: Int
+    final override val currentStateId: Int
         get() = _currentStateId
 
     /**
@@ -200,7 +200,7 @@ class StatefulLayout : FrameLayout, StateContainer<Int, State> {
      * @return shown state
      * @throws [NoSuchElementException] if [id] was not found.
      */
-    override fun showState(@IdRes id: Int): State {
+    final override fun showState(@IdRes id: Int): State {
         return showState(id, areTransitionsEnabled)
     }
 
@@ -236,7 +236,7 @@ class StatefulLayout : FrameLayout, StateContainer<Int, State> {
      * @param id state id
      * @param state state to add
      */
-    override fun addState(@IdRes id: Int, state: State) {
+    final override fun addState(@IdRes id: Int, state: State) {
         state.id = id
         addView(state, 0)
     }
@@ -248,7 +248,7 @@ class StatefulLayout : FrameLayout, StateContainer<Int, State> {
      * @return a state
      * @throws [NoSuchElementException] if the state was not found.
      */
-    override fun get(id: Int): State {
+    final override fun get(id: Int): State {
         return states[id]
             ?: throw NoSuchElementException("$id was not found in this StatefulLayout.")
     }
