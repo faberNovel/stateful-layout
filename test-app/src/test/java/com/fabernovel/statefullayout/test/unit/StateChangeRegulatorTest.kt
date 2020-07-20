@@ -2,67 +2,73 @@ package com.fabernovel.statefullayout.test.unit
 
 import com.fabernovel.statefullayout.StateChangeRegulator
 import com.fabernovel.statefullayout.StateChangeRequest
-import kotlinx.coroutines.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Assert
 import org.junit.Test
-import kotlin.time.ExperimentalTime
-import kotlin.time.milliseconds
 
 @ExperimentalCoroutinesApi
 @FlowPreview
-@ExperimentalTime
 class StateChangeRegulatorTest {
     @Test
-    fun `should keep first requested state for at least minimalTimeBetweenRequests`() {
-        var latestReceivedRequest: StateChangeRequest? = null
-        val regulator = StateChangeRegulator(REGULATOR_PACE) { request ->
-            println("Received change request to $request at ${System.currentTimeMillis()}")
-            latestReceivedRequest = request
-        }
+    fun `should keep first requested state for at least minimalTimeBetweenRequests`() =
+        runBlockingTest {
+            var latestReceivedRequest: StateChangeRequest? = null
+            val regulator = StateChangeRegulator(REGULATOR_PACE_MILLIS)
 
-        GlobalScope.launch { regulator.start() }
+            val regulationJob = launch {
+                regulator.start { request ->
+                    println("Processing $request")
+                    latestReceivedRequest = request
+                }
+            }
 
-        runBlocking {
             regulator.changeStateTo(0)
-            delay(REGULATOR_PACE * 0.1)
+            delay(REGULATOR_PACE_MILLIS scaledTo .1)
             regulator.changeStateTo(1)
             regulator.changeStateTo(2)
             regulator.changeStateTo(3)
-            delay(REGULATOR_PACE * 0.8)
-            println("Asserting at ${System.currentTimeMillis()} that state is still 0")
+            delay(REGULATOR_PACE_MILLIS scaledTo .8)
+
             Assert.assertEquals(0, latestReceivedRequest?.id)
+            regulationJob.cancel()
         }
-    }
 
     @Test
-    fun `should only keep most recent request in case of backpressure`() {
+    fun `should only keep most recent request in case of backpressure`() = runBlockingTest {
         var latestReceivedRequest: StateChangeRequest? = null
-        val regulator = StateChangeRegulator(REGULATOR_PACE) { request ->
-            println("Received change request to $request at ${System.currentTimeMillis()}")
-            latestReceivedRequest = request
+        val regulator = StateChangeRegulator(REGULATOR_PACE_MILLIS)
+
+        val regulationJob = launch {
+            regulator.start { request ->
+                println("Processing $request")
+                latestReceivedRequest = request
+            }
         }
 
-        GlobalScope.launch { regulator.start() }
+        regulator.changeStateTo(0)
+        delay(REGULATOR_PACE_MILLIS scaledTo .5)
+        regulator.changeStateTo(1)
+        regulator.changeStateTo(2)
+        delay(REGULATOR_PACE_MILLIS scaledTo .1)
+        regulator.changeStateTo(3)
+        delay(REGULATOR_PACE_MILLIS scaledTo 1.2)
 
-        runBlocking {
-            regulator.changeStateTo(0)
-            delay(REGULATOR_PACE * 0.5)
-            regulator.changeStateTo(1)
-            regulator.changeStateTo(2)
-            delay(REGULATOR_PACE * 0.1)
-            regulator.changeStateTo(3)
-            delay(REGULATOR_PACE * 1.2)
-            println("Asserting at ${System.currentTimeMillis()} that state is now 3")
-            Assert.assertEquals(3, latestReceivedRequest?.id)
-        }
+        Assert.assertEquals(3, latestReceivedRequest?.id)
+        regulationJob.cancel()
     }
 
     private suspend fun StateChangeRegulator.changeStateTo(stateId: Int) {
-        println("Requesting state change to $stateId at ${System.currentTimeMillis()}")
+        println("Requesting state change to $stateId")
         requestStateChange(StateChangeRequest(stateId, false))
     }
 
+    private infix fun Long.scaledTo(scale: Double): Long = (this * scale).toLong()
+
     companion object {
-        private val REGULATOR_PACE = 100.milliseconds
+        private const val REGULATOR_PACE_MILLIS = 500L
     }
 }
