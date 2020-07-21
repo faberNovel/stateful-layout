@@ -123,16 +123,7 @@ fun StatefulLayout.showContent(): State = showState(R.id.stateContent)
 @FlowPreview
 @ExperimentalCoroutinesApi
 fun StatefulLayout.setMinimalTimeToWaitBetweenStateChanges(timeToWaitInMillis: Long) {
-    val currentRegulator = stateChangeRegulator
-    if (currentRegulator == null) {
-        val regulator = StateChangeRegulator(timeToWaitInMillis)
-        viewCoroutineScope.launch {
-            regulator.handleStateChangeRequests { request -> processStateChangeRequest(request) }
-        }
-        stateChangeRegulator = regulator
-    } else {
-        currentRegulator.minimalTimeBetweenRequestsMillis = timeToWaitInMillis
-    }
+    stateChangeRegulator.minimalTimeBetweenRequestsMillis = timeToWaitInMillis
 }
 
 /**
@@ -149,25 +140,31 @@ fun StatefulLayout.requestStateChange(
     @IdRes stateId: Int,
     showTransitions: Boolean = areTransitionsEnabled
 ) {
-    var regulator = stateChangeRegulator
-
-    if (regulator == null) {
-        setMinimalTimeToWaitBetweenStateChanges(DEFAULT_REGULATOR_PACE)
-        regulator = stateChangeRegulator!!
-    }
-
     viewCoroutineScope.launch {
         val request = StateChangeRequest(stateId, showTransitions)
-        regulator.requestStateChange(request)
+        stateChangeRegulator.requestStateChange(request)
     }
 }
 
 @FlowPreview
 @ExperimentalCoroutinesApi
-private var StatefulLayout.stateChangeRegulator: StateChangeRegulator?
-    get() = getTag(R.id.stateChangeRegulator) as StateChangeRegulator?
-    set(value) {
-        setTag(R.id.stateChangeRegulator, value)
+private val StatefulLayout.stateChangeRegulator: StateChangeRegulator
+    get() {
+        var regulator = getTag(R.id.stateChangeRegulator) as StateChangeRegulator?
+
+        if (regulator == null) {
+            regulator = StateChangeRegulator(DEFAULT_REGULATOR_PACE)
+
+            viewCoroutineScope.launch {
+                regulator.handleStateChangeRequests { request ->
+                    processStateChangeRequest(request)
+                }
+            }
+
+            setTag(R.id.stateChangeRegulator, regulator)
+        }
+
+        return regulator
     }
 
 private const val DEFAULT_REGULATOR_PACE = 0L
