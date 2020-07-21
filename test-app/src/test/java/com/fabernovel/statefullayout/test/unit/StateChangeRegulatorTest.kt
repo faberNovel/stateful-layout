@@ -20,7 +20,7 @@ class StateChangeRegulatorTest {
             val regulator = StateChangeRegulator(REGULATOR_PACE_MILLIS)
 
             val regulationJob = launch {
-                regulator.start { request ->
+                regulator.handleStateChangeRequests { request ->
                     println("Processing $request")
                     latestReceivedRequest = request
                 }
@@ -43,7 +43,7 @@ class StateChangeRegulatorTest {
         val regulator = StateChangeRegulator(REGULATOR_PACE_MILLIS)
 
         val regulationJob = launch {
-            regulator.start { request ->
+            regulator.handleStateChangeRequests { request ->
                 println("Processing $request")
                 latestReceivedRequest = request
             }
