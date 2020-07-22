@@ -21,7 +21,16 @@ platform :android do
     lane :check do
         #ensure_git_status_clean
         build(build_type: "debug")
-        gradle(tasks: ['lintDebug', 'ktlintDebugCheck', 'testDebug'])
+        gradle(tasks: ['lintDebug', 'testDebug'])
+        begin
+            gradle(task: 'ktlintDebugCheck')
+        rescue => exception
+            Dir.chdir("..") do
+                Dir["**/reports/ktlint/*.xml"].each do |report|
+                    sh("cat #{report} | reviewdog -f=checkstyle -reporter=github-pr-check")
+                end
+            end
+        end
     end
 
     desc "Release the library"

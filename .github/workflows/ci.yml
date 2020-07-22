@@ -11,5 +11,9 @@ jobs:
         uses: actions/checkout@v2
       - name: Install dependencies
         run: bundle install
+      - name: Install review dogs
+        run: wget -O - -q https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh | sh -s -- -b /usr/local/bin/
       - name: Launch check
         run: bundle exec fastlane check
+        env:
+          REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
