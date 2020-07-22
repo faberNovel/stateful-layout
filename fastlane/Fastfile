@@ -24,7 +24,7 @@ platform :android do
         gradle(tasks: ['lintDebug', 'testDebug'])
         begin
             gradle(task: 'ktlintDebugCheck')
-        rescue => exception
+        ensure
             Dir.chdir("..") do
                 Dir["**/reports/ktlint/*.xml"].each do |report|
                     sh("cat #{report} | reviewdog -f=checkstyle -reporter=github-pr-check")
