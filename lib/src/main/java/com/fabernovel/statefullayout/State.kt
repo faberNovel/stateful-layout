@@ -133,7 +133,7 @@ class State : FrameLayout {
             visibility = View.VISIBLE
         } else {
             currentTransition = transition
-            transition.start(this, object : StateTransitionListener {
+            transition.start(this, object : StateTransitionListener { 
                 override fun onTransitionStart(transition: StateTransition) {
                     visibility = View.VISIBLE
                 }

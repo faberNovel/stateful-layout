@@ -9,7 +9,7 @@ import com.fabernovel.statefullayout.State
 
 internal class AnimationStateTransition(
     private val animation: Animation,
-    private val transitionListenerHandler: TransitionListenerHandler = DefaultTransitionListenerHandler()
+    private val transitionListenerHandler: TransitionListenerHandler=DefaultTransitionListenerHandler()
 ) : StateTransition, TransitionListenerHandler by transitionListenerHandler {
 
     constructor(
