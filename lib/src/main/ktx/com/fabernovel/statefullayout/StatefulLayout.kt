@@ -83,7 +83,7 @@ private fun State.setErrorMessage(errorMessage: String) {
     val errorTextView = findViewById<TextView>(R.id.stateErrorTitle)
     requireNotNull(errorTextView) {
         "The layout associated to the state 'stateError' must contain a TextView with the id " +
-                "'stateErrorTitle'"
+            "'stateErrorTitle'"
     }
 
     errorTextView.text = errorMessage
@@ -93,7 +93,7 @@ private fun State.setErrorRetryListener(onRetryListener: (View) -> Unit) {
     val retryButton = findViewById<Button>(R.id.stateErrorRetryButton)
     requireNotNull(retryButton) {
         "The layout associated to the state 'stateError' must contain a Button with the id " +
-                "'stateErrorRetryButton'"
+            "'stateErrorRetryButton'"
     }
 
     retryButton.setOnClickListener(onRetryListener)
