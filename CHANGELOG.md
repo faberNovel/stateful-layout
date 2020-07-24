@@ -5,6 +5,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [UNRELEASED]
+### Added
+- Add time-based regulation for state change requests with two extension methods on StatefulLayout:
+`setMinimalTimeToWaitBetweenStateChanges(minimalTime)` and `requestStateChange(request)`.
+Basically, requests passed to `requestStateChange()` will be handled in respect of a `minimalTime`
+between each handling.
 
 ## [1.0-RC05] - 26/05/2020
 ### Changed

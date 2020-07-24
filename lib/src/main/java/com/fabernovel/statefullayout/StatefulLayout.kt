@@ -229,6 +229,10 @@ class StatefulLayout : FrameLayout, StateContainer<Int, State> {
         return nextState
     }
 
+    internal fun processStateChangeRequest(request: StateChangeRequest) {
+        showState(request.id, request.showTransitions)
+    }
+
     /**
      * Add a state to the stateful layout
      * If the id already exists, the previous state is override.

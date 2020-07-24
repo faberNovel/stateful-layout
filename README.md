@@ -190,6 +190,33 @@ To load a state transition programmatically, use the helper class `StateTransiti
 - A resource version of an animator or an animation.
 - A callback (see [MainFragment](https://github.com/faberNovel/stateful-layout/blob/develop/sample-app/src/main/java/com/fabernovel/statefullayout/sample/ui/main/MainFragment.kt))  
 
+#### State-change regulation
+
+You can set a minimal waiting time by state (i.e. to avoid blinking if you change state very
+frequently) by calling `setMinimalTimeToWaitBetweenStateChanges(time)` and then using
+`statefulLayout.requestStateChange(stateId)` instead of `showState(stateId)`.
+
+While `showState(stateId)` is immediate and guaranteed, `requestStateChange(stateId)` leading to
+a state change is more hypothetical and will depend on other requests sent slightly before or after.
+
+Basically:
+
+- If requests are chained (almost zero milliseconds in between) then all will be ignored except for
+ the last one.
+- If one or many requests are sent during the "MinimalTimeToWaitBetweenStateChanges" after a request
+ has been handled then only the most recent one will be forwarded to the handler (right after that
+ minimal time has elapsed).
+
+More visual example with a MinimalTimeToWaitBetweenStateChanges = 500 ms
+
+| Time (ms)     | 0 | 5 | 100 | 200 | 500 | 550 | 550 | 550 | 555 | 2_000 | 2_005 | 3_000 | 3_005 |
+|---------------|---|---|-----|-----|-----|-----|-----|-----|-----|-------|-------|-------|-------|
+| Request sent  | A | - | B   | C   | -   | D   | E   | F   | -   | G     | -     | H     | -     |
+| State changed | - | A | -   | -   | C   | -   | -   | -   | F   | -     | G     | -     | H     |
+
+Please note that due to platform limitations the durations will not match the exact number of
+milliseconds theoretically expected.
+
 ## License
 
 ADUtils is released under the Apache 2.0 license. [See LICENSE](LICENSE) for details.

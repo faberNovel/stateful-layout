@@ -1,10 +1,16 @@
 package com.fabernovel.statefullayout
 
+import android.os.Looper
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.annotation.IdRes
 import androidx.annotation.LayoutRes
+import androidx.annotation.MainThread
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.launch
 
 /**
  * Add state view with a certain key.
@@ -77,7 +83,7 @@ private fun State.setErrorMessage(errorMessage: String) {
     val errorTextView = findViewById<TextView>(R.id.stateErrorTitle)
     requireNotNull(errorTextView) {
         "The layout associated to the state 'stateError' must contain a TextView with the id " +
-            "'stateErrorTitle'"
+                "'stateErrorTitle'"
     }
 
     errorTextView.text = errorMessage
@@ -87,7 +93,7 @@ private fun State.setErrorRetryListener(onRetryListener: (View) -> Unit) {
     val retryButton = findViewById<Button>(R.id.stateErrorRetryButton)
     requireNotNull(retryButton) {
         "The layout associated to the state 'stateError' must contain a Button with the id " +
-            "'stateErrorRetryButton'"
+                "'stateErrorRetryButton'"
     }
 
     retryButton.setOnClickListener(onRetryListener)
@@ -106,3 +112,76 @@ fun StatefulLayout.showLoading(): State = showState(R.id.stateLoading)
  * @return the content state
  */
 fun StatefulLayout.showContent(): State = showState(R.id.stateContent)
+
+/**
+ * Sets a minimal time to wait after each successful state change triggered by [requestStateChange].
+ *
+ * All requests triggered from [requestStateChange] will be handled in respect of this minimal
+ * time, sometimes dropping some requests when many (backpressure).
+ *
+ * Default value for [timeToWaitInMillis] is [DEFAULT_REGULATOR_PACE]
+ *
+ * Should be called from the UI thread.
+ *
+ * @see [StateChangeRegulator] for details about regulation rules.
+ */
+@MainThread
+@FlowPreview
+@ExperimentalCoroutinesApi
+fun StatefulLayout.setMinimalTimeToWaitBetweenStateChanges(
+    scope: CoroutineScope,
+    timeToWaitInMillis: Long
+) {
+    getStateChangeRegulator(scope).minimalTimeBetweenRequestsMillis = timeToWaitInMillis
+}
+
+/**
+ * Posts a request to change state.
+ *
+ * Not all requests will lead to a state change since they will all go through regulation defined
+ * by [setMinimalTimeToWaitBetweenStateChanges]
+ *
+ * Should be called from the UI thread.
+ *
+ * @see StateChangeRegulator
+ */
+@MainThread
+@FlowPreview
+@ExperimentalCoroutinesApi
+fun StatefulLayout.requestStateChange(
+    scope: CoroutineScope,
+    @IdRes stateId: Int,
+    showTransitions: Boolean = areTransitionsEnabled
+) {
+    scope.launch {
+        val request = StateChangeRequest(stateId, showTransitions)
+        getStateChangeRegulator(scope).requestStateChange(request)
+    }
+}
+
+@MainThread
+@FlowPreview
+@ExperimentalCoroutinesApi
+private fun StatefulLayout.getStateChangeRegulator(scope: CoroutineScope): StateChangeRegulator {
+    require(Thread.currentThread() == Looper.getMainLooper().thread) {
+        "State regulation API should be called from the UI thread"
+    }
+
+    var regulator = getTag(R.id.stateChangeRegulator) as StateChangeRegulator?
+
+    if (regulator == null) {
+        regulator = StateChangeRegulator(DEFAULT_REGULATOR_PACE)
+
+        scope.launch {
+            regulator.handleStateChangeRequests { request ->
+                processStateChangeRequest(request)
+            }
+        }
+
+        setTag(R.id.stateChangeRegulator, regulator)
+    }
+
+    return regulator
+}
+
+private const val DEFAULT_REGULATOR_PACE = 0L
