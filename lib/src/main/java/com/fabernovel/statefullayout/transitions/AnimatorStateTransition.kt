@@ -8,8 +8,8 @@ import com.fabernovel.statefullayout.State
 
 internal class AnimatorStateTransition(
     private val animator: Animator,
-    private val transitionListenerHandler: TransitionListenerHandler = DefaultTransitionListenerHandler()
-) : StateTransition, TransitionListenerHandler by transitionListenerHandler {
+    private val handler: TransitionListenerHandler = DefaultTransitionListenerHandler()
+) : StateTransition, TransitionListenerHandler by handler {
 
     constructor(
         context: Context,
@@ -19,19 +19,19 @@ internal class AnimatorStateTransition(
     init {
         animator.addListener(object : Animator.AnimatorListener {
             override fun onAnimationRepeat(animation: Animator?) {
-                transitionListenerHandler.dispatchTransitionRepeat(this@AnimatorStateTransition)
+                handler.dispatchTransitionRepeat(this@AnimatorStateTransition)
             }
 
             override fun onAnimationEnd(animation: Animator?) {
-                transitionListenerHandler.dispatchTransitionEnd(this@AnimatorStateTransition)
+                handler.dispatchTransitionEnd(this@AnimatorStateTransition)
             }
 
             override fun onAnimationCancel(animation: Animator?) {
-                transitionListenerHandler.dispatchTransitionCancel(this@AnimatorStateTransition)
+                handler.dispatchTransitionCancel(this@AnimatorStateTransition)
             }
 
             override fun onAnimationStart(animation: Animator?) {
-                transitionListenerHandler.dispatchTransitionStart(this@AnimatorStateTransition)
+                handler.dispatchTransitionStart(this@AnimatorStateTransition)
             }
         })
     }

@@ -18,6 +18,7 @@ import com.fabernovel.statefullayout.transitions.StateTransitions
  */
 class State : FrameLayout {
     private var currentTransition: StateTransition? = null
+
     /**
      * State content view to display
      * Can be null.
@@ -30,6 +31,7 @@ class State : FrameLayout {
      * Override [StatefulLayout.defaultEnterTransition]
      */
     var enterTransition: StateTransition? = null
+
     /**
      * [StateTransition] played when the state is hidden.
      * Override [StatefulLayout.defaultExitTransition]
@@ -133,11 +135,14 @@ class State : FrameLayout {
             visibility = View.VISIBLE
         } else {
             currentTransition = transition
-            transition.start(this, object : StateTransitionListener {
-                override fun onTransitionStart(transition: StateTransition) {
-                    visibility = View.VISIBLE
+            transition.start(
+                this,
+                object : StateTransitionListener {
+                    override fun onTransitionStart(transition: StateTransition) {
+                        visibility = View.VISIBLE
+                    }
                 }
-            })
+            )
         }
     }
 
@@ -151,11 +156,14 @@ class State : FrameLayout {
             visibility = View.GONE
         } else {
             currentTransition = transition
-            transition.start(this, object : StateTransitionListener {
-                override fun onTransitionEnd(transition: StateTransition) {
-                    visibility = View.GONE
+            transition.start(
+                this,
+                object : StateTransitionListener {
+                    override fun onTransitionEnd(transition: StateTransition) {
+                        visibility = View.GONE
+                    }
                 }
-            })
+            )
         }
     }
 

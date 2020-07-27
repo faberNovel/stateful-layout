@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 `setMinimalTimeToWaitBetweenStateChanges(minimalTime)` and `requestStateChange(request)`.
 Basically, requests passed to `requestStateChange()` will be handled in respect of a `minimalTime`
 between each handling.
+- Post ktlint reports on PR with reviewdog 
 
 ## [1.0-RC05] - 26/05/2020
 ### Changed
