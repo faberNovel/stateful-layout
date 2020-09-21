@@ -75,7 +75,7 @@ fun StatefulLayout.showError(
 ): State {
     return showState(R.id.stateError).apply {
         if (errorMessage != null) setErrorMessage(errorMessage)
-        if (onRetryListener != null) setErrorRetryListener(onRetryListener)
+        setErrorRetryListener(onRetryListener)
     }
 }
 
@@ -89,14 +89,17 @@ private fun State.setErrorMessage(errorMessage: String) {
     errorTextView.text = errorMessage
 }
 
-private fun State.setErrorRetryListener(onRetryListener: (View) -> Unit) {
+private fun State.setErrorRetryListener(onRetryListener: ((View) -> Unit)?) {
     val retryButton = findViewById<Button>(R.id.stateErrorRetryButton)
     requireNotNull(retryButton) {
         "The layout associated to the state 'stateError' must contain a Button with the id " +
             "'stateErrorRetryButton'"
     }
 
-    retryButton.setOnClickListener(onRetryListener)
+    retryButton.apply {
+        visibility = if (onRetryListener == null) View.GONE else View.VISIBLE
+        setOnClickListener(onRetryListener)
+    }
 }
 
 /**
