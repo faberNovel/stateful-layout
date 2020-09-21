@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 Basically, requests passed to `requestStateChange()` will be handled in respect of a `minimalTime`
 between each handling.
 - Post ktlint reports on PR with reviewdog 
+- Hide retry button on Error state if passed onRetryListener is null
 
 ## [1.0-RC05] - 26/05/2020
 ### Changed
